@@ -1,0 +1,86 @@
+<div>
+  <div class="row">
+    <form class="form-field" #placeForm="ngForm" (ngSubmit)="onSubmit(selectedPlace.value,selectedRadius.value)">
+      <div class="col s4">
+        <label>Place Select</label>
+        <select class="browser-default" #selectedPlace ngModel name="selectedPlace" required>
+          <option value="" selected>Choose your option</option>
+          <option *ngFor="let place of places" [value]="place.Name">{{place.Name}}</option>
+        </select>
+      </div>
+      <div class="col s4">
+        <label for="radius">Radius (in meters)</label>
+        <select class="browser-default" #selectedRadius ngModel name="selectedRadius" required>
+          <option value="" selected>Choose your option</option>
+          <option *ngFor="let rad of radius" [value]="rad.InMeters">{{rad.InKiloMeters}}</option>
+        </select>
+      </div>
+      <div class="col s4">
+        <label>Type</label>
+        <p>
+          <span class="col" *ngFor="let type of types">
+            <label>
+              <input type="checkbox" [(ngModel)]="type.Checked" [value]="type.ParameterName" name="optionType" checked="type.Checked"/>
+              <span class="label-field">{{type.Name}}</span>
+            </label>
+          </span>
+        </p>
+      </div>
+      <div class="container">
+        <div class="input-field col s12 right-align rigth-margin">
+          <button class="btn waves-effect waves-light" [disabled]="!placeForm.valid" type="submit" name="action">Submit
+            <i class="material-icons right">send</i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="container">
+    <div class="row" *ngIf="dataFlag">
+      <div class="col s12 right-align">
+        <a class="btn-floating btn-large waves-effect waves-light red" [href]="sanitize(down)" download="place.csv">
+          <i class="material-icons">file_download</i>
+        </a>
+      </div>
+    </div>
+    <div class="row" *ngIf="dataFlag">
+      <div class="col s12">
+        <div class="col s3 m3" *ngFor="let data of viewData">
+          <div class="card hoverable" style="height: 500px;">
+            <div class="card-image">
+              <img [src]="data.ImgUrl" style="height:178.29px">
+            </div>
+            <span class="card-title truncate">{{data.Name}}</span>
+            <div class="card-content row">
+              <div class="col s12 center-align">
+                <rating [(ngModel)]="data.Rating"></rating>{{data.Rating}}
+              </div>
+              <div class="col s12">
+                <label class="col s3 right-align">
+                  Address:
+                </label>
+                <label class="col s9">
+                  {{data.Address}}
+                </label>
+              </div>
+              <div class="col s12">
+                <label class="col s3 right-align">
+                  Type:
+                </label>
+                <span class="chip ">
+                  {{data.Type}}
+                </span>
+              </div>
+            </div>
+            <div class="card-action">
+              <a [href]="data.DetailUrl">This is a link</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="!dataFlag">
+      Loading ..
+    </div>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+/* You can add global styles to this file, and also import other style files */
+
+.card label {
+    font-size: .9rem;
+    color: #6e6e6e;
+}
+
+.card-title {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.label-field{
+    width:120px;
+}
+.form-field{
+    margin: 15px 15px;
+}
+.right-margin{
+    right: 10%;
+   
+}
+.image-logo{
+    margin: 5px;
+    width:70px;
+}
