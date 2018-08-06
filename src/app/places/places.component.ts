@@ -28,22 +28,22 @@ export class PlacesComponent implements OnInit {
     { InMeters: 10000, InKiloMeters: 10 },
     { InMeters: 20000, InKiloMeters: 20 },
   ];
-  types: Type[] = [
-    { DataAvaialble: false, Checked: false, Name: 'Restaurant', ParameterName: 'resturant' },
-    { DataAvaialble: false, Checked: false, Name: 'Cafe', ParameterName: 'cafe' },
-    { DataAvaialble: false, Checked: false, Name: 'Hotel', ParameterName: 'hotel' },
-    { DataAvaialble: false, Checked: false, Name: 'Courthouse', ParameterName: 'courthouse' },
-    { DataAvaialble: false, Checked: false, Name: 'Gym', ParameterName: 'gym' },
-    { DataAvaialble: false, Checked: false, Name: 'ATM', ParameterName: 'atm' },
-    { DataAvaialble: false, Checked: false, Name: 'Bank', ParameterName: 'bank' }
-  ];
+  types: Type[];
   dataAvailableFlag = false;
   dataLoadingFlag = false;
   noDataFlag = false;
   constructor(private placeService: PlacesService, private cdrf: ChangeDetectorRef, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-
+    this.types = [
+      { DataAvaialble: false, Checked: false, Name: 'Restaurant', ParameterName: 'restaurant' },
+      { DataAvaialble: false, Checked: true, Name: 'Cafe', ParameterName: 'cafe' },
+      { DataAvaialble: false, Checked: false, Name: 'Hotel', ParameterName: 'hotel' },
+      { DataAvaialble: false, Checked: false, Name: 'Courthouse', ParameterName: 'courthouse' },
+      { DataAvaialble: false, Checked: false, Name: 'Gym', ParameterName: 'gym' },
+      { DataAvaialble: false, Checked: false, Name: 'ATM', ParameterName: 'atm' },
+      { DataAvaialble: false, Checked: false, Name: 'Bank', ParameterName: 'bank' }
+    ];
   }
 
   onSubmit(place, radius: number) {
@@ -73,7 +73,14 @@ export class PlacesComponent implements OnInit {
       .filter(opt => opt.Checked)
       .map(opt => opt.ParameterName);
   }
+  checkBoxValueChange(type) {
 
+    this.types.forEach((element) => {
+      if (element.Name === type.Name) {
+        element.Checked = (!element.Checked);
+      }
+    });
+  }
   checkDataAvailability() {
     if (this.dataAvailableFlag === false) {
       this.noDataFlag = true;
@@ -187,7 +194,7 @@ export class PlacesComponent implements OnInit {
           Type: element.Type,
           Rating: element.Rating,
           Address: element.Address,
-          DetailUrl: element.DetailUrl
+          DetailUrl: 'https://maps.googleapis.com/maps/' + element.DetailUrl
         };
         csvDataArray.push(csvPlaceObj);
       });

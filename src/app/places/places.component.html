@@ -20,7 +20,8 @@
         <p>
           <span class="col" *ngFor="let type of types">
             <label>
-              <input type="checkbox" [(ngModel)]="type.Checked" [value]="type.ParameterName" name="optionType" checked="type.Checked" />
+<input class="browser-default" type="checkbox" (click)="checkBoxValueChange(type)"  [value]="type.ParameterName" name="optionType"
+  [checked]="type.Checked" />
               <span class="label-field">{{type.Name}}</span>
             </label>
           </span>
@@ -51,7 +52,7 @@
               <img [src]="data.ImgUrl" style="height:178.29px">
             </div>
             <span class="card-title truncate">{{data.Name}}</span>
-            <div class="card-content row">
+            <div class="card-content row" style="height:170px">
               <div class="col s12 center-align">
                 <rating [(ngModel)]="data.Rating"></rating>{{data.Rating}}
               </div>
