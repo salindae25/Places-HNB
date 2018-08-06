@@ -47,7 +47,6 @@ export class PlacesComponent implements OnInit {
   }
 
   onSubmit(place, radius: number) {
-    // debugger;
     const selectedType = this.selectedTypes;
     this.viewData = [];
     this.dataAvailableFlag = false;
@@ -60,15 +59,15 @@ export class PlacesComponent implements OnInit {
       });
     }
   }
+
   setDataFlag() {
     this.types.filter((opt) => {
       if (opt.DataAvaialble) {
         this.dataAvailableFlag = true;
       }
-
     });
-
   }
+
   get selectedTypes() {
     return this.types
       .filter(opt => opt.Checked)
@@ -115,6 +114,7 @@ export class PlacesComponent implements OnInit {
 
     }
   }
+
   setViewObject(placeObj, type) {
     const _viewObj: ViewPlace = new ViewPlace();
     let photos;
@@ -159,12 +159,14 @@ export class PlacesComponent implements OnInit {
         }
       );
   }
+
   saveAtLocalStorage(data, place, radius, type) {
     data._place = place;
     data.radius = radius;
     data.type = type;
     localStorage.setItem(place.Name + '_' + radius + '_' + type, JSON.stringify(data));
   }
+
   findPlaceObjUsingName(name: string): Place {
     // ToDo:set an default value if needed
     let _palce: Place;
