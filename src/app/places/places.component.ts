@@ -14,7 +14,7 @@ export class PlacesComponent implements OnInit {
   down: any;
   apiKey = 'AIzaSyDgiFkqYXkSGmgFRV6F0ApZpGVikwGZhgw';
   viewData: Array<ViewPlace>;
-  placeDetailUrl = 'https://maps.googleapis.com/maps/api/place/details/json?placeid=';
+  placeDetailUrl = 'api/place/details/json?placeid=';
   places: Place[] = [
     { Name: 'HNB (Head Office)', Latititude: 6.921098, Longititude: 79.862532 },
     { Name: 'HNB (Negombo)', Latititude: 7.208752, Longititude: 79.839170 },
