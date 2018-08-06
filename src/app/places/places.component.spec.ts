@@ -10,6 +10,8 @@ import { Place } from './places.model';
 describe('PlacesComponent', () => {
   let component: PlacesComponent;
   let fixture: ComponentFixture<PlacesComponent>;
+  const tempPlace: Place = { Name: 'HNB (Negombo)', Latititude: 7.208752, Longititude: 79.839170 };
+ const  apiKey = 'AIzaSyDgiFkqYXkSGmgFRV6F0ApZpGVikwGZhgw';
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -24,7 +26,7 @@ describe('PlacesComponent', () => {
         PlacesService
       ]
     })
-      .compileComponents();
+    .compileComponents();
   }));
 
   beforeEach(() => {
@@ -32,7 +34,6 @@ describe('PlacesComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-  const tempPlace: Place = { Name: 'HNB (Negombo)', Latititude: 7.208752, Longititude: 79.839170 };
 
 
 
