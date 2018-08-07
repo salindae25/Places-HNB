@@ -84,9 +84,9 @@ export class PlacesComponent implements OnInit {
   checkDataAvailability() {
     if (this.isDataAvailable === false) {
       this.noDataFlag = true;
-      setTimeout(() => {
-        this.noDataFlag = false;
-      }, 5000);
+      // setTimeout(() => {
+      //   this.noDataFlag = false;
+      // }, 5000);
     }
   }
 
