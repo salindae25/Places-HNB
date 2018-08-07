@@ -13,8 +13,8 @@ export class PlacesComponent implements OnInit {
   queryData: any;
   down: any;
   apiKey = 'AIzaSyDgiFkqYXkSGmgFRV6F0ApZpGVikwGZhgw';
-  viewData: Array<ViewPlace>;
-  placeDetailUrl = 'api/place/details/json?placeid=';
+  viewData: Array<ViewPlace> = [];
+  placeDetailUrl = 'https://maps.googleapis.com/maps/api/place/details/json?placeid=';
   places: Place[] = [
     { Name: 'HNB (Head Office)', Latititude: 6.921098, Longititude: 79.862532 },
     { Name: 'HNB (Negombo)', Latititude: 7.208752, Longititude: 79.839170 },
@@ -37,8 +37,8 @@ export class PlacesComponent implements OnInit {
   ngOnInit() {
     this.types = [
       { DataAvaialble: false, Checked: false, Name: 'Restaurant', ParameterName: 'restaurant' },
-      { DataAvaialble: false, Checked: true, Name: 'Cafe', ParameterName: 'cafe' },
-      { DataAvaialble: false, Checked: false, Name: 'Hotel', ParameterName: 'hotel' },
+      { DataAvaialble: false, Checked: false, Name: 'Cafe', ParameterName: 'cafe' },
+      { DataAvaialble: false, Checked: false, Name: 'Hotel', ParameterName: 'lodging' },
       { DataAvaialble: false, Checked: false, Name: 'Courthouse', ParameterName: 'courthouse' },
       { DataAvaialble: false, Checked: false, Name: 'Gym', ParameterName: 'gym' },
       { DataAvaialble: false, Checked: false, Name: 'ATM', ParameterName: 'atm' },
@@ -51,6 +51,7 @@ export class PlacesComponent implements OnInit {
     this.viewData = [];
     this.dataAvailableFlag = false;
     this.dataLoadingFlag = true;
+    this.noDataFlag = false;
     const placeObj = this.findPlaceObjUsingName(place);
     if (selectedType) {
       selectedType.forEach((type) => {
@@ -82,14 +83,28 @@ export class PlacesComponent implements OnInit {
     });
   }
   checkDataAvailability() {
-    if (this.dataAvailableFlag === false) {
+    if (this.isDataAvailable === false) {
       this.noDataFlag = true;
-      setTimeout(() => {
-        this.noDataFlag = false;
-      }, 5000);
+      // setTimeout(() => {
+      //   this.noDataFlag = false;
+      // }, 5000);
     }
   }
-
+  isValid(formValidity) {
+    if (formValidity && this.isValidType) {
+      return true;
+    }
+    return false;
+  }
+  get isValidType() {
+    let flag = false;
+    this.types.forEach((element) => {
+      if (element.Checked === true) {
+        flag = true;
+      }
+    });
+    return flag;
+  }
   setDataAvailableTrue(type: string) {
     this.types.forEach((opt) => {
       if (opt.ParameterName === type) {
@@ -121,14 +136,23 @@ export class PlacesComponent implements OnInit {
 
     }
   }
-
+  stringCapitalize(str: string) {
+    if (str) {
+      let res = str.replace(/\s[a-z]+/gi, function (x) {
+        return x[0] + x[1].toUpperCase() + x.substring(2);
+      });
+      res = str.replace(/[a-z]+\s/gi, function (x) {
+        return x[0].toUpperCase() + x.substring(1);
+      });
+      return res;
+    }
+  }
   setViewObject(placeObj, type) {
     const _viewObj: ViewPlace = new ViewPlace();
     let photos;
-    _viewObj.Name = placeObj.name;
+    _viewObj.Name = this.stringCapitalize(placeObj.name);
     _viewObj.Rating = placeObj.rating;
     _viewObj.Address = placeObj.vicinity;
-    _viewObj.Address = _viewObj.Address.toLowerCase();
     _viewObj.Type = type;
     if (placeObj.photos) {
       photos = placeObj.photos['0'];
@@ -153,7 +177,14 @@ export class PlacesComponent implements OnInit {
       _queryData = this.callService(place, radius, type);
     }
   }
-
+  get isDataAvailable() {
+    if (this.viewData) {
+      if (this.viewData.length !== 0) {
+        return true;
+      }
+    }
+    return false;
+  }
   callService(place: Place, radius: number, type: string) {
 
     this.placeService.doQuery(place, radius, type)

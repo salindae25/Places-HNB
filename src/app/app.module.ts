@@ -11,13 +11,16 @@ import { PlacesComponent } from './places/places.component';
 import { ErrorComponent } from './error/error.component';
 import { appRoutes } from './app.routing';
 import { PlacesService } from './places/places.service';
+import { ImageComponent } from './image/image.component';
+import { ImageService } from './image/image.service';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     PlacesComponent,
-    ErrorComponent
+    ErrorComponent,
+    ImageComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +31,7 @@ import { PlacesService } from './places/places.service';
   ],
   providers: [
     PlacesService,
-
+    ImageService,
   ],
   bootstrap: [AppComponent]
 })
