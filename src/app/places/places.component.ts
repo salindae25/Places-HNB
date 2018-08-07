@@ -135,7 +135,6 @@ export class PlacesComponent implements OnInit {
   setViewObject(placeObj, type) {
     const _viewObj: ViewPlace = new ViewPlace();
     let photos;
-    debugger;
     _viewObj.Name = this.stringCapitalize(placeObj.name);
     _viewObj.Rating = placeObj.rating;
     _viewObj.Address = placeObj.vicinity;
