@@ -121,14 +121,23 @@ export class PlacesComponent implements OnInit {
 
     }
   }
-
+  stringCapitalize(str: string) {
+    if (str) {
+      let res = str.replace(/\s[a-z]+/gi, function (x) {
+        return x[0] + x[1].toUpperCase() + x.substring(2);
+      });
+      res = str.replace(/[a-z]+\s/gi, function (x) {
+        return  x[0].toUpperCase() + x.substring(1);
+      });
+      return res;
+    }
+  }
   setViewObject(placeObj, type) {
     const _viewObj: ViewPlace = new ViewPlace();
     let photos;
-    _viewObj.Name = placeObj.name;
+    _viewObj.Name = this.stringCapitalize(placeObj.name);
     _viewObj.Rating = placeObj.rating;
     _viewObj.Address = placeObj.vicinity;
-    _viewObj.Address = _viewObj.Address.toLowerCase();
     _viewObj.Type = type;
     if (placeObj.photos) {
       photos = placeObj.photos['0'];

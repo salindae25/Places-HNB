@@ -49,7 +49,7 @@
         <div class="col s3 m3" *ngFor="let data of viewData">
           <div class="card hoverable" style="height: 500px;">
             <div class="card-image">
-              <img [src]="data.ImgUrl" style="height:178.29px">
+              <app-image [url]="data.ImgUrl" [type]="data.Type"></app-image>
             </div>
             <span class="card-title truncate">{{data.Name}}</span>
             <div class="card-content row" style="height:170px">
