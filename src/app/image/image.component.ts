@@ -34,7 +34,7 @@ export class ImageComponent implements OnChanges {
             if (element.Name === this.type) {
               this.dataUrl = element.DefaultImage;
             }
-          })
+          });
         }
       });
     }
