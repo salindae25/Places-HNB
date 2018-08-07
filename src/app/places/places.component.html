@@ -20,8 +20,8 @@
         <p>
           <span class="col" *ngFor="let type of types">
             <label>
-<input class="browser-default" type="checkbox" (click)="checkBoxValueChange(type)"  [value]="type.ParameterName" name="optionType"
-  [checked]="type.Checked" />
+              <input class="browser-default" type="checkbox" (click)="checkBoxValueChange(type)" [value]="type.ParameterName" name="optionType"
+                [checked]="type.Checked" />
               <span class="label-field">{{type.Name}}</span>
             </label>
           </span>
@@ -37,14 +37,14 @@
     </form>
   </div>
   <div class="container">
-    <div class="row" *ngIf="dataAvailableFlag">
+    <div class="row" *ngIf="isDataAvailable">
       <div class="col s12 right-align">
         <a class="btn-floating btn-large waves-effect waves-light red" [href]="sanitize(down)" download="place.csv">
           <i class="material-icons">file_download</i>
         </a>
       </div>
     </div>
-    <div class="row" *ngIf="dataAvailableFlag">
+    <div class="row" *ngIf="isDataAvailable">
       <div class="col s12">
         <div class="col s3 m3" *ngFor="let data of viewData">
           <div class="card hoverable" style="height: 500px;">
