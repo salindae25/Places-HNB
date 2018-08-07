@@ -13,7 +13,7 @@ export class PlacesComponent implements OnInit {
   queryData: any;
   down: any;
   apiKey = 'AIzaSyDgiFkqYXkSGmgFRV6F0ApZpGVikwGZhgw';
-  viewData: Array<ViewPlace>;
+  viewData: Array<ViewPlace> = [];
   placeDetailUrl = 'api/place/details/json?placeid=';
   places: Place[] = [
     { Name: 'HNB (Head Office)', Latititude: 6.921098, Longititude: 79.862532 },
@@ -82,7 +82,7 @@ export class PlacesComponent implements OnInit {
     });
   }
   checkDataAvailability() {
-    if (this.dataAvailableFlag === false) {
+    if (this.isDataAvailable === false) {
       this.noDataFlag = true;
       setTimeout(() => {
         this.noDataFlag = false;
@@ -153,7 +153,14 @@ export class PlacesComponent implements OnInit {
       _queryData = this.callService(place, radius, type);
     }
   }
-
+  get isDataAvailable() {
+    if (this.viewData) {
+      if (this.viewData.length !== 0) {
+        return true;
+      }
+    }
+    return false;
+  }
   callService(place: Place, radius: number, type: string) {
 
     this.placeService.doQuery(place, radius, type)
