@@ -14,7 +14,7 @@ export class PlacesComponent implements OnInit {
   down: any;
   apiKey = 'AIzaSyDgiFkqYXkSGmgFRV6F0ApZpGVikwGZhgw';
   viewData: Array<ViewPlace> = [];
-  placeDetailUrl = 'api/place/details/json?placeid=';
+  placeDetailUrl = 'https://maps.googleapis.com/maps/api/place/details/json?placeid=';
   places: Place[] = [
     { Name: 'HNB (Head Office)', Latititude: 6.921098, Longititude: 79.862532 },
     { Name: 'HNB (Negombo)', Latititude: 7.208752, Longititude: 79.839170 },
@@ -37,8 +37,8 @@ export class PlacesComponent implements OnInit {
   ngOnInit() {
     this.types = [
       { DataAvaialble: false, Checked: false, Name: 'Restaurant', ParameterName: 'restaurant' },
-      { DataAvaialble: false, Checked: true, Name: 'Cafe', ParameterName: 'cafe' },
-      { DataAvaialble: false, Checked: false, Name: 'Hotel', ParameterName: 'hotel' },
+      { DataAvaialble: false, Checked: false, Name: 'Cafe', ParameterName: 'cafe' },
+      { DataAvaialble: false, Checked: false, Name: 'Hotel', ParameterName: 'lodging' },
       { DataAvaialble: false, Checked: false, Name: 'Courthouse', ParameterName: 'courthouse' },
       { DataAvaialble: false, Checked: false, Name: 'Gym', ParameterName: 'gym' },
       { DataAvaialble: false, Checked: false, Name: 'ATM', ParameterName: 'atm' },
@@ -51,6 +51,7 @@ export class PlacesComponent implements OnInit {
     this.viewData = [];
     this.dataAvailableFlag = false;
     this.dataLoadingFlag = true;
+    this.noDataFlag = false;
     const placeObj = this.findPlaceObjUsingName(place);
     if (selectedType) {
       selectedType.forEach((type) => {
@@ -84,12 +85,26 @@ export class PlacesComponent implements OnInit {
   checkDataAvailability() {
     if (this.isDataAvailable === false) {
       this.noDataFlag = true;
-      setTimeout(() => {
-        this.noDataFlag = false;
-      }, 5000);
+      // setTimeout(() => {
+      //   this.noDataFlag = false;
+      // }, 5000);
     }
   }
-
+  isValid(formValidity) {
+    if (formValidity && this.isValidType) {
+      return true;
+    }
+    return false;
+  }
+  get isValidType() {
+    let flag = false;
+    this.types.forEach((element) => {
+      if (element.Checked === true) {
+        flag = true;
+      }
+    });
+    return flag;
+  }
   setDataAvailableTrue(type: string) {
     this.types.forEach((opt) => {
       if (opt.ParameterName === type) {
@@ -127,7 +142,7 @@ export class PlacesComponent implements OnInit {
         return x[0] + x[1].toUpperCase() + x.substring(2);
       });
       res = str.replace(/[a-z]+\s/gi, function (x) {
-        return  x[0].toUpperCase() + x.substring(1);
+        return x[0].toUpperCase() + x.substring(1);
       });
       return res;
     }
