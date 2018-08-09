@@ -2,22 +2,31 @@
   <div class="search-field">
     <div class="row">
       <form class="form-field" #placeForm="ngForm" (ngSubmit)="onSubmit(selectedPlace.value,selectedRadius.value)">
-        <div class="col s4 offset-s1">
-          <label>Place Select</label>
-          <select class="browser-default" #selectedPlace ngModel name="selectedPlace" required>
-            <option value="" selected>Choose your option</option>
-            <option *ngFor="let place of places" [value]="place.Name">{{place.Name}}</option>
-          </select>
+
+        <div class="col s3 offset-s1">
+          <mat-form-field class="example-full-width">
+            <label class="label-field">Location</label>
+            <input type="text" aria-label="Location" class="browser-default" matInput #selectedPlace [formControl]="SelectedPlaceCntrl"
+              [matAutocomplete]="auto" required>
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let place of locationsOptions|async" [value]="place.Name">
+                {{place.Name}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
         </div>
-        <div class="col s2">
-          <label for="radius">Radius (in Km)</label>
-          <select class="browser-default" #selectedRadius ngModel name="selectedRadius" required>
-            <option value="" selected>Choose your option</option>
-            <option *ngFor="let rad of radius" [value]="rad.InMeters">{{rad.InKiloMeters}}</option>
-          </select>
+        <div class="col s3">
+          <mat-form-field>
+            <label class="label-field">Radius (in Km)</label>
+            <mat-select #selectedRadius required style="padding: 5px;">
+              <mat-option *ngFor="let rad of radius" [value]="rad.InMeters">
+                {{rad.InKiloMeters}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
         <div class="col s4">
-          <label>Type</label>
+          <label class="label-field">Type</label>
           <p>
             <span class="col" *ngFor="let type of types">
               <label>

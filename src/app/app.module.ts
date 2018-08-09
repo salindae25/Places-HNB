@@ -2,8 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule, MatInputModule, MatSelectModule } from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RatingModule } from 'ngx-rating';
 
 import { AppComponent } from './app.component';
@@ -27,7 +28,12 @@ import { ImageService } from './image/image.service';
     RouterModule.forRoot(appRoutes),
     HttpClientModule,
     FormsModule,
-    RatingModule
+    ReactiveFormsModule,
+    RatingModule,
+    MatAutocompleteModule,
+    BrowserAnimationsModule,
+    MatInputModule,
+    MatSelectModule
   ],
   providers: [
     PlacesService,

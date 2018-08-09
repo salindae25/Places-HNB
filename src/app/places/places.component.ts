@@ -2,6 +2,9 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ViewPlace, Place, Radius, Type, CSVPlace } from './places.model';
 import { PlacesService } from './places.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs/observable';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-places',
@@ -16,6 +19,8 @@ export class PlacesComponent implements OnInit {
   viewData: Array<ViewPlace> = [];
   placeDetailUrl = 'https://maps.googleapis.com/maps/api/place/details/json?placeid=';
   downloadableFileName: string;
+  SelectedPlaceCntrl: FormControl = new FormControl();
+
   places: Place[] = [
     { Name: 'HNB (Head Office)', Latititude: 6.921098, Longititude: 79.862532 },
     { Name: 'HNB (Negombo)', Latititude: 7.208752, Longititude: 79.839170 },
@@ -33,17 +38,25 @@ export class PlacesComponent implements OnInit {
   dataAvailableFlag = false;
   dataLoadingFlag = false;
   noDataFlag = false;
-  constructor(private placeService: PlacesService, private cdrf: ChangeDetectorRef, private sanitizer: DomSanitizer) { }
+  locationsOptions: Observable<Place[]>;
+  constructor(private placeService: PlacesService, private cdrf: ChangeDetectorRef, private sanitizer: DomSanitizer) {
+    this.locationsOptions = this.SelectedPlaceCntrl.valueChanges
+      .pipe(
+        startWith<string>(''),
+        map(name => name ? this._filter(name) : this.places.slice())
+      );
+  }
 
   ngOnInit() {
     this.types = [
-      { DataAvaialble: false, Checked: false, Name: 'Restaurant', ParameterName: 'restaurant' },
       { DataAvaialble: false, Checked: false, Name: 'Cafe', ParameterName: 'cafe' },
+      { DataAvaialble: false, Checked: false, Name: 'School', ParameterName: 'school' },
       { DataAvaialble: false, Checked: false, Name: 'Hotel', ParameterName: 'lodging' },
-      { DataAvaialble: false, Checked: false, Name: 'Courthouse', ParameterName: 'courthouse' },
+      { DataAvaialble: false, Checked: false, Name: 'Hospital', ParameterName: 'hospital' },
       { DataAvaialble: false, Checked: false, Name: 'Gym', ParameterName: 'gym' },
-      { DataAvaialble: false, Checked: false, Name: 'ATM', ParameterName: 'atm' },
-      { DataAvaialble: false, Checked: false, Name: 'Bank', ParameterName: 'bank' }
+      { DataAvaialble: false, Checked: false, Name: 'Spa', ParameterName: 'spa' },
+      { DataAvaialble: false, Checked: false, Name: 'Restaurant', ParameterName: 'restaurant' },
+
     ];
   }
 
@@ -61,7 +74,14 @@ export class PlacesComponent implements OnInit {
       });
     }
   }
+  displayFn(user?: string): string | undefined {
+    return user ? user : undefined;
+  }
+  private _filter(name: string): Place[] {
+    const filterValue = name.toLowerCase();
 
+    return this.places.filter(option => option.Name.toLowerCase().indexOf(filterValue) === 0);
+  }
   setDataFlag() {
     this.types.filter((opt) => {
       if (opt.DataAvaialble) {
