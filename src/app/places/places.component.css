@@ -18,3 +18,12 @@ form .btn {
   background-color: #f39c12;
   color: #1a268a !important;
 }
+input.mat-input-element{
+    padding: 5px;
+
+}
+,
+.mat-select-value{
+     padding: 5px;
+
+}
