@@ -9,11 +9,14 @@ export class PlacesService {
   constructor(private http: HttpClient) { }
 
   doQuery(coOrdinates, radius, placeType) {
-    const reqHeader = new HttpHeaders({ 'dataType': 'jsonp' });
     let queryString = 'json?location=' + coOrdinates.Latititude + ',' + coOrdinates.Longititude;
     queryString += '&radius=' + radius + '&type=' + placeType + '&key=';
     queryString = queryString.toLowerCase();
+
     return this.http.get(this.url + queryString + this.apiKey);
 
+  }
+  getDetails(url) {
+    return this.http.get(url);
   }
 }

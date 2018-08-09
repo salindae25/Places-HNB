@@ -39,13 +39,7 @@ export class ImageComponent implements OnChanges {
       });
     }
   }
-  changeHappen() {
-    if (this.url) {
-      this.imageService.get(this.url).subscribe(resp => {
-        console.log(resp);
-      });
-    }
-  }
+
   convertToDataUrl() {
 
   }
