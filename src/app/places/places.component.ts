@@ -2,6 +2,9 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ViewPlace, Place, Radius, Type, CSVPlace } from './places.model';
 import { PlacesService } from './places.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs/observable';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-places',
@@ -15,6 +18,9 @@ export class PlacesComponent implements OnInit {
   apiKey = 'AIzaSyDgiFkqYXkSGmgFRV6F0ApZpGVikwGZhgw';
   viewData: Array<ViewPlace> = [];
   placeDetailUrl = 'https://maps.googleapis.com/maps/api/place/details/json?placeid=';
+  downloadableFileName: string;
+  SelectedPlaceCntrl: FormControl = new FormControl();
+
   places: Place[] = [
     { Name: 'HNB (Head Office)', Latititude: 6.921098, Longititude: 79.862532 },
     { Name: 'HNB (Negombo)', Latititude: 7.208752, Longititude: 79.839170 },
@@ -32,17 +38,25 @@ export class PlacesComponent implements OnInit {
   dataAvailableFlag = false;
   dataLoadingFlag = false;
   noDataFlag = false;
-  constructor(private placeService: PlacesService, private cdrf: ChangeDetectorRef, private sanitizer: DomSanitizer) { }
+  locationsOptions: Observable<Place[]>;
+  constructor(private placeService: PlacesService, private cdrf: ChangeDetectorRef, private sanitizer: DomSanitizer) {
+    this.locationsOptions = this.SelectedPlaceCntrl.valueChanges
+      .pipe(
+        startWith<string>(''),
+        map(name => name ? this._filter(name) : this.places.slice())
+      );
+  }
 
   ngOnInit() {
     this.types = [
-      { DataAvaialble: false, Checked: false, Name: 'Restaurant', ParameterName: 'restaurant' },
       { DataAvaialble: false, Checked: false, Name: 'Cafe', ParameterName: 'cafe' },
+      { DataAvaialble: false, Checked: false, Name: 'School', ParameterName: 'school' },
       { DataAvaialble: false, Checked: false, Name: 'Hotel', ParameterName: 'lodging' },
-      { DataAvaialble: false, Checked: false, Name: 'Courthouse', ParameterName: 'courthouse' },
+      { DataAvaialble: false, Checked: false, Name: 'Hospital', ParameterName: 'hospital' },
       { DataAvaialble: false, Checked: false, Name: 'Gym', ParameterName: 'gym' },
-      { DataAvaialble: false, Checked: false, Name: 'ATM', ParameterName: 'atm' },
-      { DataAvaialble: false, Checked: false, Name: 'Bank', ParameterName: 'bank' }
+      { DataAvaialble: false, Checked: false, Name: 'Spa', ParameterName: 'spa' },
+      { DataAvaialble: false, Checked: false, Name: 'Restaurant', ParameterName: 'restaurant' },
+
     ];
   }
 
@@ -60,7 +74,14 @@ export class PlacesComponent implements OnInit {
       });
     }
   }
+  displayFn(user?: string): string | undefined {
+    return user ? user : undefined;
+  }
+  private _filter(name: string): Place[] {
+    const filterValue = name.toLowerCase();
 
+    return this.places.filter(option => option.Name.toLowerCase().indexOf(filterValue) === 0);
+  }
   setDataFlag() {
     this.types.filter((opt) => {
       if (opt.DataAvaialble) {
@@ -74,6 +95,7 @@ export class PlacesComponent implements OnInit {
       .filter(opt => opt.Checked)
       .map(opt => opt.ParameterName);
   }
+
   checkBoxValueChange(type) {
 
     this.types.forEach((element) => {
@@ -82,6 +104,7 @@ export class PlacesComponent implements OnInit {
       }
     });
   }
+
   checkDataAvailability() {
     if (this.isDataAvailable === false) {
       this.noDataFlag = true;
@@ -90,6 +113,7 @@ export class PlacesComponent implements OnInit {
       // }, 5000);
     }
   }
+
   isValid(formValidity) {
     if (formValidity && this.isValidType) {
       return true;
@@ -122,7 +146,7 @@ export class PlacesComponent implements OnInit {
         const typesTemp: string = placeObj.types;
         // if there are no photos obj is excluded
         // type of query not match
-        if (typesTemp.indexOf(type) >= 0 && placeObj.photos) {
+        if (typesTemp.indexOf(type) >= 0) {
           this.viewData.push(_viewObj);
         }
         if (this.viewData.length > 0) {
@@ -136,6 +160,7 @@ export class PlacesComponent implements OnInit {
 
     }
   }
+
   stringCapitalize(str: string) {
     if (str) {
       let res = str.replace(/\s[a-z]+/gi, function (x) {
@@ -147,6 +172,7 @@ export class PlacesComponent implements OnInit {
       return res;
     }
   }
+
   setViewObject(placeObj, type) {
     const _viewObj: ViewPlace = new ViewPlace();
     let photos;
@@ -156,8 +182,10 @@ export class PlacesComponent implements OnInit {
     _viewObj.Type = type;
     if (placeObj.photos) {
       photos = placeObj.photos['0'];
-      _viewObj.ImgUrl = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=' + photos.width;
+      _viewObj.ImgUrl = 'api/place/photo?maxwidth=' + photos.width;
       _viewObj.ImgUrl += '&photoreference=' + photos.photo_reference + '&key=' + this.apiKey;
+    } else {
+      _viewObj.ImgUrl = 'null';
     }
     _viewObj.DetailUrl = this.placeDetailUrl + placeObj.place_id + '&key=' + this.apiKey;
     return _viewObj;
@@ -177,6 +205,7 @@ export class PlacesComponent implements OnInit {
       _queryData = this.callService(place, radius, type);
     }
   }
+
   get isDataAvailable() {
     if (this.viewData) {
       if (this.viewData.length !== 0) {
@@ -185,6 +214,7 @@ export class PlacesComponent implements OnInit {
     }
     return false;
   }
+
   callService(place: Place, radius: number, type: string) {
 
     this.placeService.doQuery(place, radius, type)
@@ -239,8 +269,22 @@ export class PlacesComponent implements OnInit {
       const csvData = this.processCSVData(this.viewData);
       const testblob = this.arrayToCSV(csvData);
       const blob = new Blob([testblob], { type: 'text/csv' });
+      this.downloadableFileName = this.createDownloadableFileName();
       this.down = window.URL.createObjectURL(blob);
     }
+  }
+
+  createDownloadableFileName() {
+    let name = 'places';
+    const timeStamp = this.getTimeStamp();
+    name = name + '-' + timeStamp + '.csv';
+    return name;
+  }
+
+  getTimeStamp() {
+    const d = new Date();
+    const n = d.toISOString().toString();
+    return n;
   }
 
   sanitize(url: string) {
