@@ -30,3 +30,19 @@ export class CSVPlace {
     Type: string;
     DetailUrl?: string;
 }
+export class DialogData {
+    Name: string;
+    Type: string[];
+    Address: string;
+    TelephoneNo: string;
+    PhotoRef?: Photo[];
+    WorkingHours?: string[];
+    openNow:boolean;
+    WebSite:string;
+}
+
+export class Photo {
+    RefId: string;
+    width: number;
+    height: number;
+}

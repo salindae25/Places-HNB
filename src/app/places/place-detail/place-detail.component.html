@@ -1,0 +1,37 @@
+<div *ngIf="viewData">
+
+  <h2 mat-dialog-title>{{viewData.Name}}</h2>
+  <h4>{{viewData.Type[0]}}</h4>
+  <mat-dialog-content>
+    <div>
+      <p>
+        <mat-icon class="blue-text">place
+        </mat-icon>
+        {{viewData.Address}}
+      </p>
+    </div>
+    <div>
+      <span>
+        <mat-icon class="blue-text">language
+        </mat-icon>
+        <a [href]="viewData.WebSite">{{viewData.WebSite}}</a>
+      </span>
+    </div>
+    <div>
+      <span>
+        <mat-icon class="blue-text">phone
+        </mat-icon>
+        {{viewData.TelephoneNo}}
+      </span>
+    </div>
+    <div>
+      <mat-icon class="blue-text">clock
+      </mat-icon>
+      {{viewData.OpenNow}}
+     
+    </div>
+    <br>
+    <br>
+  </mat-dialog-content>
+
+</div>

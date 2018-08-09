@@ -3,8 +3,10 @@ import { ViewPlace, Place, Radius, Type, CSVPlace } from './places.model';
 import { PlacesService } from './places.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs/observable';
+import { Observable } from 'rxjs/Observable';
 import { map, startWith } from 'rxjs/operators';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { PlaceDetailComponent} from './place-detail/place-detail.component';
 
 @Component({
   selector: 'app-places',
@@ -17,7 +19,7 @@ export class PlacesComponent implements OnInit {
   down: any;
   apiKey = 'AIzaSyDgiFkqYXkSGmgFRV6F0ApZpGVikwGZhgw';
   viewData: Array<ViewPlace> = [];
-  placeDetailUrl = 'https://maps.googleapis.com/maps/api/place/details/json?placeid=';
+  placeDetailUrl = 'api/place/details/json?placeid=';
   downloadableFileName: string;
   SelectedPlaceCntrl: FormControl = new FormControl();
 
@@ -39,7 +41,11 @@ export class PlacesComponent implements OnInit {
   dataLoadingFlag = false;
   noDataFlag = false;
   locationsOptions: Observable<Place[]>;
-  constructor(private placeService: PlacesService, private cdrf: ChangeDetectorRef, private sanitizer: DomSanitizer) {
+  constructor(
+    private placeService: PlacesService,
+    private cdrf: ChangeDetectorRef,
+    private sanitizer: DomSanitizer,
+    public dialog: MatDialog) {
     this.locationsOptions = this.SelectedPlaceCntrl.valueChanges
       .pipe(
         startWith<string>(''),
@@ -58,6 +64,20 @@ export class PlacesComponent implements OnInit {
       { DataAvaialble: false, Checked: false, Name: 'Restaurant', ParameterName: 'restaurant' },
 
     ];
+  }
+
+  openDialog(url): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = true;
+    const dialogRef = this.dialog.open(PlaceDetailComponent, {
+      height: '600px',
+      width: '400px',
+      data: { url: url }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 
   onSubmit(place, radius: number) {
@@ -144,7 +164,6 @@ export class PlacesComponent implements OnInit {
       data.results.forEach((placeObj: any) => {
         const _viewObj: ViewPlace = this.setViewObject(placeObj, type);
         const typesTemp: string = placeObj.types;
-        // if there are no photos obj is excluded
         // type of query not match
         if (typesTemp.indexOf(type) >= 0) {
           this.viewData.push(_viewObj);
@@ -183,7 +202,8 @@ export class PlacesComponent implements OnInit {
     if (placeObj.photos) {
       photos = placeObj.photos['0'];
       _viewObj.ImgUrl = 'api/place/photo?maxwidth=' + photos.width;
-      _viewObj.ImgUrl += '&photoreference=' + photos.photo_reference + '&key=' + this.apiKey;
+      _viewObj.ImgUrl += '&photoreference=' + photos.photo_reference;
+      // '&key=' + this.apiKey;
     } else {
       _viewObj.ImgUrl = 'null';
     }
