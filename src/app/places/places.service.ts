@@ -4,7 +4,7 @@ import { Place } from './places.model';
 
 @Injectable()
 export class PlacesService {
-  url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/';
+  url = 'api/place/nearbysearch/';
   apiKey = 'AIzaSyDgiFkqYXkSGmgFRV6F0ApZpGVikwGZhgw';
   constructor(private http: HttpClient) { }
 

@@ -15,6 +15,7 @@ export class PlacesComponent implements OnInit {
   apiKey = 'AIzaSyDgiFkqYXkSGmgFRV6F0ApZpGVikwGZhgw';
   viewData: Array<ViewPlace> = [];
   placeDetailUrl = 'https://maps.googleapis.com/maps/api/place/details/json?placeid=';
+  downloadableFileName: string;
   places: Place[] = [
     { Name: 'HNB (Head Office)', Latititude: 6.921098, Longititude: 79.862532 },
     { Name: 'HNB (Negombo)', Latititude: 7.208752, Longititude: 79.839170 },
@@ -74,6 +75,7 @@ export class PlacesComponent implements OnInit {
       .filter(opt => opt.Checked)
       .map(opt => opt.ParameterName);
   }
+
   checkBoxValueChange(type) {
 
     this.types.forEach((element) => {
@@ -82,6 +84,7 @@ export class PlacesComponent implements OnInit {
       }
     });
   }
+
   checkDataAvailability() {
     if (this.isDataAvailable === false) {
       this.noDataFlag = true;
@@ -90,6 +93,7 @@ export class PlacesComponent implements OnInit {
       // }, 5000);
     }
   }
+
   isValid(formValidity) {
     if (formValidity && this.isValidType) {
       return true;
@@ -122,7 +126,7 @@ export class PlacesComponent implements OnInit {
         const typesTemp: string = placeObj.types;
         // if there are no photos obj is excluded
         // type of query not match
-        if (typesTemp.indexOf(type) >= 0 && placeObj.photos) {
+        if (typesTemp.indexOf(type) >= 0) {
           this.viewData.push(_viewObj);
         }
         if (this.viewData.length > 0) {
@@ -136,6 +140,7 @@ export class PlacesComponent implements OnInit {
 
     }
   }
+
   stringCapitalize(str: string) {
     if (str) {
       let res = str.replace(/\s[a-z]+/gi, function (x) {
@@ -147,6 +152,7 @@ export class PlacesComponent implements OnInit {
       return res;
     }
   }
+
   setViewObject(placeObj, type) {
     const _viewObj: ViewPlace = new ViewPlace();
     let photos;
@@ -156,8 +162,10 @@ export class PlacesComponent implements OnInit {
     _viewObj.Type = type;
     if (placeObj.photos) {
       photos = placeObj.photos['0'];
-      _viewObj.ImgUrl = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=' + photos.width;
+      _viewObj.ImgUrl = 'api/place/photo?maxwidth=' + photos.width;
       _viewObj.ImgUrl += '&photoreference=' + photos.photo_reference + '&key=' + this.apiKey;
+    } else {
+      _viewObj.ImgUrl = 'null';
     }
     _viewObj.DetailUrl = this.placeDetailUrl + placeObj.place_id + '&key=' + this.apiKey;
     return _viewObj;
@@ -177,6 +185,7 @@ export class PlacesComponent implements OnInit {
       _queryData = this.callService(place, radius, type);
     }
   }
+
   get isDataAvailable() {
     if (this.viewData) {
       if (this.viewData.length !== 0) {
@@ -185,6 +194,7 @@ export class PlacesComponent implements OnInit {
     }
     return false;
   }
+
   callService(place: Place, radius: number, type: string) {
 
     this.placeService.doQuery(place, radius, type)
@@ -239,8 +249,22 @@ export class PlacesComponent implements OnInit {
       const csvData = this.processCSVData(this.viewData);
       const testblob = this.arrayToCSV(csvData);
       const blob = new Blob([testblob], { type: 'text/csv' });
+      this.downloadableFileName = this.createDownloadableFileName();
       this.down = window.URL.createObjectURL(blob);
     }
+  }
+
+  createDownloadableFileName() {
+    let name = 'places';
+    const timeStamp = this.getTimeStamp();
+    name = name + '-' + timeStamp + '.csv';
+    return name;
+  }
+
+  getTimeStamp() {
+    const d = new Date();
+    const n = d.toISOString().toString();
+    return n;
   }
 
   sanitize(url: string) {
