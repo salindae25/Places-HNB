@@ -50,7 +50,7 @@
   <div class="container">
     <div class="row" *ngIf="isDataAvailable">
       <div class="col s12 right-align">
-        <a class="btn-floating btn-large waves-effect waves-light red" [href]="sanitize(down)" download="place.csv">
+<a class="btn-floating btn-large waves-effect waves-light red" [href]="sanitize(down)" [download]="downloadableFileName">
           <i class="material-icons">file_download</i>
         </a>
       </div>
