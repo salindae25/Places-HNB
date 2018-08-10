@@ -51,9 +51,10 @@ export class PlaceDetailComponent {
         return photo;
       });
     }
-    if(data.website){
-      dialogData.WebSite =data.website;
+    if (data.website) {
+      dialogData.WebSite = data.website;
     }
+    dialogData.Rating = data.rating;
     dialogData.WorkingHours = data.opening_hours.weekday_text;
     dialogData.openNow = data.opening_hours.open_now;
     return dialogData;

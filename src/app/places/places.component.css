@@ -22,8 +22,11 @@ input.mat-input-element{
     padding: 5px;
 
 }
-,
+
 .mat-select-value{
      padding: 5px;
 
+}
+::ng-deep .mat-dialog-container {
+padding:0px !important;
 }

@@ -37,8 +37,9 @@ export class DialogData {
     TelephoneNo: string;
     PhotoRef?: Photo[];
     WorkingHours?: string[];
-    openNow:boolean;
-    WebSite:string;
+    openNow: boolean;
+    WebSite: string;
+    Rating: number;
 }
 
 export class Photo {

@@ -1,37 +1,68 @@
 <div *ngIf="viewData">
-
-  <h2 mat-dialog-title>{{viewData.Name}}</h2>
-  <h4>{{viewData.Type[0]}}</h4>
+  <div class="modal-band" style="padding-top: 24px;padding-bottom: 24px;">
+    <div class="flex-container">
+      <span style="font-size: 18pt;text-align: left;">{{viewData.Name}}</span>
+    </div>
+    <div class="flex-container">
+      <span style="font-size: 13pt;color:ash;  text-align: left;">{{viewData.Type[0]}}</span>
+      <span class="stars-label">
+        {{viewData.Rating}}
+        <rating [(ngModel)]="viewData.Rating" [readonly]="true"></rating>
+      </span>
+    </div>
+  </div>
   <mat-dialog-content>
-    <div>
-      <p>
+    <div class="flex-container">
+      <span>
         <mat-icon class="blue-text">place
         </mat-icon>
         {{viewData.Address}}
-      </p>
-    </div>
-    <div>
+      </span>
       <span>
-        <mat-icon class="blue-text">language
+        <mat-icon class="blue-text">work
         </mat-icon>
-        <a [href]="viewData.WebSite">{{viewData.WebSite}}</a>
+        Open Now: {{viewData.openNow?'Yes':'No'}}
       </span>
     </div>
-    <div>
+    <div class="flex-container">
       <span>
         <mat-icon class="blue-text">phone
         </mat-icon>
         {{viewData.TelephoneNo}}
       </span>
+      <span>
+        <mat-icon class="blue-text">language
+        </mat-icon>
+        <a style="text-decoration: none;" [href]="viewData.WebSite">{{viewData.WebSite}}</a>
+      </span>
     </div>
-    <div>
-      <mat-icon class="blue-text">clock
-      </mat-icon>
-      {{viewData.OpenNow}}
-     
+
+    <div class="flex-container">
+      <span style="width:30%;">
+        <mat-icon class="blue-text">access_time
+        </mat-icon>Working Hours :
+      </span>
+      <span style="width:60%;">
+        <mat-expansion-panel >
+          <mat-expansion-panel-header>
+            {{viewData.WorkingHours[0]}}
+          </mat-expansion-panel-header>
+
+          <ul *ngFor="let hours of viewData.WorkingHours" style="text-decoration: none;">
+            <li>{{hours}}</li>
+          </ul>
+
+        </mat-expansion-panel>
+      </span>
     </div>
-    <br>
-    <br>
+
+
   </mat-dialog-content>
 
 </div>
+<style>
+  figure.mat-figure {
+    justify-content: left !important;
+  }
+
+</style>
