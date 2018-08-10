@@ -1,3 +1,44 @@
-.btn-floating i{
-    right: -80%;
+.btn-floating i {
+  right: -80%;
+}
+
+.mat-dialog-content {
+  height: 300px;
+}
+
+span.stars-label .star-icon {
+  font-size: 1rem !important;
+}
+
+div.modal-band {
+  background: #1a268a;
+  color: #f39c12;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+::ng-deep .mat-dialog-content {
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  height: auto !important;
+}
+
+.mat-figure {
+  justify-content: left !important;
+
+}
+p{
+    align-items: center !important;
+    padding: 25px 5px
+}
+div.flex-container{
+  display: flex;
+  flex-direction: row;
+}
+div.flex-container>span{
+ width: 50%;
+ margin: 10px;
+ text-align: left;
+ padding-left: 10px;
+ align-items: center;
 }

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule, MatInputModule, MatSelectModule, MatDialogModule } from '@angular/material';
+import { MatAutocompleteModule, MatInputModule, MatSelectModule, MatDialogModule, MatGridListModule } from '@angular/material';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -37,7 +37,7 @@ import { PlaceDetailComponent } from './places/place-detail/place-detail.compone
     MatAutocompleteModule,
     BrowserAnimationsModule,
     MatInputModule,
-    MatSelectModule, MatDialogModule, MatExpansionModule, MatIconModule
+    MatSelectModule, MatDialogModule, MatExpansionModule, MatIconModule, MatGridListModule,
   ],
   providers: [
     PlacesService,

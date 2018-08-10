@@ -6,7 +6,7 @@ import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { map, startWith } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { PlaceDetailComponent} from './place-detail/place-detail.component';
+import { PlaceDetailComponent } from './place-detail/place-detail.component';
 
 @Component({
   selector: 'app-places',
@@ -70,8 +70,9 @@ export class PlacesComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     const dialogRef = this.dialog.open(PlaceDetailComponent, {
-      height: '600px',
-      width: '400px',
+      height: 'auto',
+      width: '650px',
+      panelClass: 'detail-modal',
       data: { url: url }
     });
 
