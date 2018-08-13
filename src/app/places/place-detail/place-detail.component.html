@@ -6,7 +6,9 @@
     <div class="flex-container">
       <span style="font-size: 13pt;color:ash;  text-align: left;">{{viewData.Type[0]}}</span>
       <span class="stars-label">
-        {{viewData.Rating}}
+        <span style="font-size: 13pt;">
+          {{viewData.Rating}}
+        </span>
         <rating [(ngModel)]="viewData.Rating" [readonly]="true"></rating>
       </span>
     </div>
@@ -37,24 +39,27 @@
       </span>
     </div>
 
-    <div class="flex-container">
-      <span style="width:30%;">
-        <mat-icon class="blue-text">access_time
-        </mat-icon>Working Hours :
-      </span>
-      <span style="width:60%;">
-        <mat-expansion-panel >
-          <mat-expansion-panel-header>
-            {{viewData.WorkingHours[0]}}
+   
+
+      
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="flex-container">
+            <mat-icon class="blue-text">access_time
+            </mat-icon>
+            <span>
+              Working Hours </span>
+            <span>:{{viewData.WorkingHours|todayTimePeriod|timePeriod}}</span>
+
           </mat-expansion-panel-header>
 
-          <ul *ngFor="let hours of viewData.WorkingHours" style="text-decoration: none;">
-            <li>{{hours}}</li>
-          </ul>
+          <div *ngFor="let hours of viewData.WorkingHours" class="flex-container">
+
+            <span>{{hours|day}}</span>
+            <span>:{{hours|timePeriod}}</span>
+
+          </div>
 
         </mat-expansion-panel>
-      </span>
-    </div>
 
 
   </mat-dialog-content>

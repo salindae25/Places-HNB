@@ -30,3 +30,6 @@ input.mat-input-element{
 ::ng-deep .mat-dialog-container {
 padding:0px !important;
 }
+::ng-deep.star-icon {
+  font-size: 12pt !important;
+}
