@@ -70,7 +70,7 @@ export class PlacesComponent implements OnInit {
     this.filteredTypes = this.selectedTypeCtrl.valueChanges
       .pipe(
         startWith(null),
-        map((type: string | null) => type ? this._filter(type) : this.allTypes.slice())
+        map((type: string) => type ? this._filter(type) : this.allTypes.slice())
       );
   }
   ngOnInit() {
