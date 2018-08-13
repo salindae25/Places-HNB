@@ -16,7 +16,7 @@ export interface DataSent {
 })
 export class PlaceDetailComponent {
   errorFlag = false;
-  viewData: DialogData;
+  viewData: DialogData = null;
   constructor(
     private placesService: PlacesService,
     public dialogRef: MatDialogRef<PlaceDetailComponent>,

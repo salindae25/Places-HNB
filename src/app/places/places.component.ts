@@ -71,7 +71,7 @@ export class PlacesComponent implements OnInit {
     dialogConfig.autoFocus = true;
     const dialogRef = this.dialog.open(PlaceDetailComponent, {
       height: 'auto',
-      width: '650px',
+      width: '800px',
       panelClass: 'detail-modal',
       data: { url: url }
     });
