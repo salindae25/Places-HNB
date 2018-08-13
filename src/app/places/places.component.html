@@ -18,24 +18,26 @@
         <div class="col s3">
           <mat-form-field>
             <label class="label-field">Radius (in Km)</label>
-            <mat-select #selectedRadius required style="padding: 5px;">
-              <mat-option *ngFor="let rad of radius" [value]="rad.InMeters">
-                {{rad.InKiloMeters}}
-              </mat-option>
-            </mat-select>
+            <input type="number" aria-label="Radius" class="browser-default" matInput #selectedRadius required>
           </mat-form-field>
         </div>
         <div class="col s4">
-          <label class="label-field">Type</label>
-          <p>
-            <span class="col" *ngFor="let type of types">
-              <label>
-                <input class="browser-default" type="checkbox" (click)="checkBoxValueChange(type)" [value]="type.ParameterName" name="optionType"
-                  [checked]="type.Checked" />
-                <span class="label-field">{{type.Name}}</span>
-              </label>
-            </span>
-          </p>
+          <mat-form-field>
+            <mat-chip-list #chipList>
+              <mat-chip *ngFor="let type of _selectedTypes" [selectable]="selectable" [removable]="removable" (removed)="remove(type)">
+                {{type}}
+                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+              </mat-chip>
+              <input placeholder="Add catogory.." #typeInput [formControl]="selectedTypeCtrl" [matAutocomplete]="auto" [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
+            </mat-chip-list>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+              <mat-option *ngFor="let type of filteredTypes | async" [value]="type">
+                {{type}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
         </div>
         <div class="container">
           <div class="input-field col s12 right-align rigth-margin">
@@ -50,7 +52,7 @@
   <div class="container">
     <div class="row" *ngIf="isDataAvailable">
       <div class="col s12 right-align">
-<a class="btn-floating btn-large waves-effect waves-light red" [href]="sanitize(down)" [download]="downloadableFileName">
+        <a class="btn-floating btn-large waves-effect waves-light red" [href]="sanitize(down)" [download]="downloadableFileName">
           <i class="material-icons">file_download</i>
         </a>
       </div>
