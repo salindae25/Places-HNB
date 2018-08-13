@@ -17,6 +17,9 @@ import { PlacesService } from './places/places.service';
 import { ImageComponent } from './image/image.component';
 import { ImageService } from './image/image.service';
 import { PlaceDetailComponent } from './places/place-detail/place-detail.component';
+import { DayPipe } from './day.pipe';
+import { TimePeriodPipe } from './time-period.pipe';
+import { TodayTimePeriodPipe } from './today-time-period.pipe';
 
 
 @NgModule({
@@ -25,7 +28,10 @@ import { PlaceDetailComponent } from './places/place-detail/place-detail.compone
     PlacesComponent,
     ErrorComponent,
     ImageComponent,
-    PlaceDetailComponent
+    PlaceDetailComponent,
+    DayPipe,
+    TimePeriodPipe,
+    TodayTimePeriodPipe
   ],
   imports: [
     BrowserModule,
