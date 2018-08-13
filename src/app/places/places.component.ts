@@ -203,8 +203,8 @@ export class PlacesComponent implements OnInit {
     if (placeObj.photos) {
       photos = placeObj.photos['0'];
       _viewObj.ImgUrl = 'api/place/photo?maxwidth=' + photos.width;
-      _viewObj.ImgUrl += '&photoreference=' + photos.photo_reference;
-      // '&key=' + this.apiKey;
+      _viewObj.ImgUrl += '&photoreference=' + photos.photo_reference+'&key=' + this.apiKey;
+      // 
     } else {
       _viewObj.ImgUrl = 'null';
     }
