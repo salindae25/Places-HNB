@@ -18,7 +18,7 @@ import { PlaceDetailComponent } from './place-detail/place-detail.component';
 export class PlacesComponent implements OnInit {
   queryData: any;
   down: any;
-  apiKey = 'AIzaSyDgiFkqYXkSGmgFRV6F0ApZpGVikwGZhgw';
+  apiKey = 'AIzaSyCTY07DLNb078JDTetb41jgDnLZxOQtbgg';
   viewData: Array<ViewPlace> = [];
   placeDetailUrl = 'api/place/details/json?placeid=';
   downloadableFileName: string;
@@ -33,7 +33,7 @@ export class PlacesComponent implements OnInit {
   _selectedTypes: string[] = [];
   filteredTypes: Observable<string[]>;
 
-  allTypes: string[] = ['Cafe', 'School', 'Hotel', 'Hospital', 'Gym', 'Spa', 'Restaurant'];
+  allTypes: string[] = ['Cafe', 'School', 'Lodging', 'Hospital', 'Gym', 'Spa', 'Restaurant'];
   types: Place[] = [];
 
   @ViewChild('typeInput') typeInput: ElementRef;
@@ -139,10 +139,14 @@ export class PlacesComponent implements OnInit {
       console.log('The dialog was closed');
     });
   }
+  convertMeters(rad) {
+    return rad * 1000;
+  }
 
   onSubmit(place, radius: number) {
     // const selectedType = this.selectedTypes;
     this.viewData = [];
+    radius = this.convertMeters(radius);
     this.dataAvailableFlag = false;
     this.dataLoadingFlag = true;
     this.noDataFlag = false;
@@ -253,14 +257,16 @@ export class PlacesComponent implements OnInit {
     const _viewObj: ViewPlace = new ViewPlace();
     let photos;
     _viewObj.Name = this.stringCapitalize(placeObj.name);
+    if (placeObj.rating) {
+      _viewObj.Rating = 0.0;
+    }
     _viewObj.Rating = placeObj.rating;
     _viewObj.Address = placeObj.vicinity;
     _viewObj.Type = type;
     if (placeObj.photos) {
       photos = placeObj.photos['0'];
       _viewObj.ImgUrl = 'api/place/photo?maxwidth=' + photos.width;
-      _viewObj.ImgUrl += '&photoreference=' + photos.photo_reference;
-      // '&key=' + this.apiKey;
+      _viewObj.ImgUrl += '&photoreference=' + photos.photo_reference + '&key=' + this.apiKey;
     } else {
       _viewObj.ImgUrl = 'null';
     }

@@ -1,73 +1,80 @@
 <div *ngIf="viewData">
-  <div class="modal-band" style="padding-top: 24px;padding-bottom: 24px;">
-    <div class="flex-container">
-      <span style="font-size: 18pt;text-align: left;">{{viewData.Name}}</span>
-    </div>
-    <div class="flex-container">
-      <span style="font-size: 13pt;color:ash;  text-align: left;">{{viewData.Type[0]}}</span>
-      <span class="stars-label">
-        <span style="font-size: 13pt;">
-          {{viewData.Rating}}
-        </span>
-        <rating [(ngModel)]="viewData.Rating" [readonly]="true"></rating>
-      </span>
+  <div class="modal-band">
+    <div class="row ">
+      <div class="col-md-8 text-left">
+        <span style="font-size:22pt">{{viewData.Name}}</span>
+        <div class="">
+          <span style="font-size: 18pt;color:ash;  text-align: left;">{{viewData.Type[0]}}</span>
+        </div>
+      </div>
+      <div class="col-md-4 text-right">
+        <div class="stars-label">
+          <span style="font-size:22pt">
+            {{viewData.Rating}}
+          </span>
+          <br>
+          <rating [(ngModel)]="viewData.Rating" [readonly]="true"></rating>
+        </div>
+      </div>
     </div>
   </div>
   <mat-dialog-content>
-    <div class="flex-container">
-      <span>
-        <mat-icon class="blue-text">place
-        </mat-icon>
-        {{viewData.Address}}
-      </span>
-      <span>
-        <mat-icon class="blue-text">work
-        </mat-icon>
-        Open Now: {{viewData.openNow?'Yes':'No'}}
-      </span>
+
+    <div class="row">
+      <div class="col-md-6 pt-3 pl-4" *ngIf="viewData.Address">
+        
+          <mat-icon class="blue-text">place
+          </mat-icon>
+         <span > {{viewData.Address}}
+        </span>
+      </div>
+<div class="col-md-6  pt-3">
+        <span>
+          <mat-icon class="blue-text">work
+          </mat-icon>
+          Open Now: {{viewData.openNow?'Yes':'No'}}
+        </span>
+      </div>
     </div>
-    <div class="flex-container">
-      <span>
-        <mat-icon class="blue-text">phone
-        </mat-icon>
-        {{viewData.TelephoneNo}}
-      </span>
-      <span>
-        <mat-icon class="blue-text">language
-        </mat-icon>
-        <a style="text-decoration: none;" [href]="viewData.WebSite">{{viewData.WebSite}}</a>
-      </span>
+    <div class="row">
+<div class="col-md-6 pt-3  pl-4">
+        <span *ngIf="viewData.TelephoneNo">
+          <mat-icon class="blue-text">phone
+          </mat-icon>
+          {{viewData.TelephoneNo}}
+        </span>
+      </div>
+<div class="col-md-6 pt-3">
+        <span *ngIf="viewData.WebSite">
+          <mat-icon class="blue-text">language
+          </mat-icon>
+          <a style="text-decoration: none;" [href]="viewData.WebSite">{{viewData.WebSite? 'Website':null}}</a>
+        </span>
+      </div>
     </div>
 
-   
+ 
+    <div *ngIf="viewData.WorkingHours" style="margin-left: 25px">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header class="flex-container">
+          <table class="table">
+            <tr>
+              <th>
+                <mat-icon class="blue-text">access_time
+                </mat-icon> Working Hours </th>
+              <th>:{{viewData.WorkingHours|todayTimePeriod|timePeriod}}</th>
+            </tr>
 
-      
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="flex-container">
-            <mat-icon class="blue-text">access_time
-            </mat-icon>
-            <span>
-              Working Hours </span>
-            <span>:{{viewData.WorkingHours|todayTimePeriod|timePeriod}}</span>
+          </table>
+        </mat-expansion-panel-header>
+        <div *ngFor="let hours of viewData.WorkingHours" class="flex-container">
 
-          </mat-expansion-panel-header>
-
-          <div *ngFor="let hours of viewData.WorkingHours" class="flex-container">
-
-            <span>{{hours|day}}</span>
-            <span>:{{hours|timePeriod}}</span>
-
-          </div>
-
-        </mat-expansion-panel>
-
-
+          <span>{{hours|day}}</span>
+          <span>:{{hours|timePeriod}}</span>
+          <hr>
+        </div>
+      </mat-expansion-panel>
+    </div>
   </mat-dialog-content>
 
 </div>
-<style>
-  figure.mat-figure {
-    justify-content: left !important;
-  }
-
-</style>

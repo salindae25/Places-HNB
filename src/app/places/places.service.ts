@@ -5,7 +5,7 @@ import { Place } from './places.model';
 @Injectable()
 export class PlacesService {
   url = 'api/place/nearbysearch/';
-  apiKey = 'AIzaSyDgiFkqYXkSGmgFRV6F0ApZpGVikwGZhgw';
+  apiKey = 'AIzaSyCTY07DLNb078JDTetb41jgDnLZxOQtbgg';
   constructor(private http: HttpClient) { }
 
   doQuery(coOrdinates, radius, placeType) {
