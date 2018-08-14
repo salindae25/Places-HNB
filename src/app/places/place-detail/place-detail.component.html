@@ -21,34 +21,34 @@
   <mat-dialog-content>
 
     <div class="row">
-      <div class="col-md-6 pt-3 pl-4" *ngIf="viewData.Address">
+      <div class="col-md-6 pt-3 pl-5" *ngIf="viewData.Address">
         
-          <mat-icon class="blue-text">place
+          <mat-icon class="blue-text" style="font-size: 20px;">place
           </mat-icon>
          <span > {{viewData.Address}}
         </span>
       </div>
 <div class="col-md-6  pt-3">
-        <span>
-          <mat-icon class="blue-text">work
+        
+<mat-icon class="blue-text" style="font-size: 20px;">work
           </mat-icon>
-          Open Now: {{viewData.openNow?'Yes':'No'}}
+         <span> Open Now: {{viewData.openNow?'Yes':'No'}}
         </span>
       </div>
     </div>
     <div class="row">
-<div class="col-md-6 pt-3  pl-4">
-        <span *ngIf="viewData.TelephoneNo">
-          <mat-icon class="blue-text">phone
+<div class="col-md-6  pl-5" *ngIf="viewData.TelephoneNo">
+       
+<mat-icon class="blue-text" style="font-size: 20px;">phone
           </mat-icon>
-          {{viewData.TelephoneNo}}
+          <span > {{viewData.TelephoneNo}}
         </span>
       </div>
-<div class="col-md-6 pt-3">
-        <span *ngIf="viewData.WebSite">
-          <mat-icon class="blue-text">language
+<div class="col-md-6" *ngIf="viewData.WebSite">
+      
+<mat-icon class="blue-text" style="font-size: 20px;">language
           </mat-icon>
-          <a style="text-decoration: none;" [href]="viewData.WebSite">{{viewData.WebSite? 'Website':null}}</a>
+         <span>   <a style="text-decoration: none;" [href]="viewData.WebSite">{{viewData.WebSite? 'Website':null}}</a>
         </span>
       </div>
     </div>
