@@ -22,15 +22,15 @@ export class PlacesComponent implements OnInit {
   viewData: Array<ViewPlace> = [];
   placeDetailUrl = 'api/place/details/json?placeid=';
   downloadableFileName: string;
-  SelectedPlaceCntrl: FormControl = new FormControl();
+  selectedPlaceCntrl: FormControl = new FormControl();
   // *********************************************************//
   visible = true;
   selectable = true;
   removable = true;
   addOnBlur = false;
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  selectedTypeCtrl = new FormControl();
-  _selectedTypes: string[];
+  selectedTypeCtrl: FormControl = new FormControl();
+  _selectedTypes: string[] = [];
   filteredTypes: Observable<string[]>;
 
   allTypes: string[] = ['Cafe', 'School', 'Hotel', 'Hospital', 'Gym', 'Spa', 'Restaurant'];
@@ -61,7 +61,8 @@ export class PlacesComponent implements OnInit {
     private sanitizer: DomSanitizer,
     public dialog: MatDialog) {
 
-    this.locationsOptions = this.SelectedPlaceCntrl.valueChanges
+    debugger;
+    this.locationsOptions = this.selectedPlaceCntrl.valueChanges
       .pipe(
         startWith<string>(''),
         map(name => name ? this._filter(name) : this.places.slice())
@@ -69,8 +70,8 @@ export class PlacesComponent implements OnInit {
 
     this.filteredTypes = this.selectedTypeCtrl.valueChanges
       .pipe(
-        startWith(null),
-        map((type: string) => type ? this._filter(type) : this.allTypes.slice())
+        startWith<string>(''),
+        map((type) => type ? this._filterType(type) : this.allTypes.slice())
       );
   }
   ngOnInit() {
@@ -146,12 +147,12 @@ export class PlacesComponent implements OnInit {
     this.dataLoadingFlag = true;
     this.noDataFlag = false;
     const placeObj = this.findPlaceObjUsingName(place);
-    // if (selectedType) {
-    //   selectedType.forEach((type) => {
-    //     this.doQueryBasedOnType(placeObj, radius, type);
-    //     this.cdrf.detectChanges();
-    //   });
-    // }
+    if (this._selectedTypes !== []) {
+      this._selectedTypes.forEach((type) => {
+        this.doQueryBasedOnType(placeObj, radius, type.toString().toLowerCase());
+        this.cdrf.detectChanges();
+      });
+    }
   }
   displayFn(user?: string): string | undefined {
     return user ? user : undefined;
@@ -221,7 +222,7 @@ export class PlacesComponent implements OnInit {
         const _viewObj: ViewPlace = this.setViewObject(placeObj, type);
         const typesTemp: string = placeObj.types;
         // type of query not match
-        if (typesTemp.indexOf(type) >= 0) {
+        if (typesTemp.indexOf(type.toLowerCase()) >= 0) {
           this.viewData.push(_viewObj);
         }
         if (this.viewData.length > 0) {

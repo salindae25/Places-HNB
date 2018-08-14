@@ -24,7 +24,6 @@ export class PlaceDetailComponent {
   ) { }
 
   ngOnInit() {
-    debugger;
     this.placesService.getDetails(this.data.url).subscribe((data: any) => {
       console.log(data);
       if (data.result) {

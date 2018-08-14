@@ -6,10 +6,10 @@
         <div class="col s3 offset-s1">
           <mat-form-field class="example-full-width">
             <label class="label-field">Location</label>
-            <input type="text" aria-label="Location" class="browser-default" matInput #selectedPlace [formControl]="SelectedPlaceCntrl"
-              [matAutocomplete]="auto" required>
+            <input type="text" aria-label="Location" matInput #selectedPlace [formControl]="selectedPlaceCntrl" [matAutocomplete]="auto"
+              required>
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-              <mat-option *ngFor="let place of locationsOptions|async" [value]="place.Name">
+              <mat-option *ngFor="let place of locationsOptions |async" [value]="place.Name">
                 {{place.Name}}
               </mat-option>
             </mat-autocomplete>
@@ -28,10 +28,10 @@
                 {{type}}
                 <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
               </mat-chip>
-              <input placeholder="Add catogory.." #typeInput [formControl]="selectedTypeCtrl" [matAutocomplete]="auto" [matChipInputFor]="chipList"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
+              <input #typeInput [formControl]="selectedTypeCtrl" [matAutocomplete]="autoType" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
             </mat-chip-list>
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <mat-autocomplete #autoType="matAutocomplete" (optionSelected)="selected($event)">
               <mat-option *ngFor="let type of filteredTypes | async" [value]="type">
                 {{type}}
               </mat-option>
@@ -41,7 +41,7 @@
         </div>
         <div class="container">
           <div class="input-field col s12 right-align rigth-margin">
-            <button class="btn waves-effect waves-light" [disabled]="!isValid(placeForm.valid)" type="submit" name="action">Submit
+            <button class="btn waves-effect waves-light"  type="submit" name="action">Submit
               <i class="material-icons right">send</i>
             </button>
           </div>
