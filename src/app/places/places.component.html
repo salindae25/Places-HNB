@@ -40,22 +40,17 @@
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
-
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 text-right">
+            <button class="btn waves-effect waves-light" type="submit" [disabled]="isValid(selectedPlace.value,selectedRadius.value)"
+              name="action">Submit
+              <i class="material-icons right">send</i>
+            </button>
           </div>
 
-
-
-          
-           
-          </div>
-  <div class="row">
-              <div class="col-md-12 text-right">
- <button class="btn waves-effect waves-light" type="submit" name="action">Submit
-                <i class="material-icons right">send</i>
-              </button>
-              </div>
-
-            </div>
+        </div>
 
 
 
@@ -83,12 +78,13 @@
           <hr>
           <div class="row" style="min-height:170px">
             <div class="col-md-12 center-align">
-             
+
               <span style="font-size: 22pt">
 
                 {{data.Rating}}
-              </span ><br>
- <rating [(ngModel)]="data.Rating"></rating>
+              </span>
+              <br>
+              <rating [(ngModel)]="data.Rating"></rating>
             </div>
             <div class="col-md-12 text-center">
 

@@ -23,7 +23,7 @@ export class PlacesComponent implements OnInit {
   placeDetailUrl = 'api/place/details/json?placeid=';
   downloadableFileName: string;
   selectedPlaceCntrl: FormControl = new FormControl();
-  // *********************************************************//
+  // **********************AutoComplete Types variables***********************************//
   visible = true;
   selectable = true;
   removable = true;
@@ -37,7 +37,7 @@ export class PlacesComponent implements OnInit {
   types: Place[] = [];
 
   @ViewChild('typeInput') typeInput: ElementRef;
-  // ********************************************************//
+  // **********************************************************************************//
   places: Place[] = [
     { Name: 'Head Office', Latititude: 6.921098, Longititude: 79.862532 },
     { Name: 'Negombo', Latititude: 7.208752, Longititude: 79.839170 },
@@ -61,7 +61,7 @@ export class PlacesComponent implements OnInit {
     private sanitizer: DomSanitizer,
     public dialog: MatDialog) {
 
-    debugger;
+
     this.locationsOptions = this.selectedPlaceCntrl.valueChanges
       .pipe(
         startWith<string>(''),
@@ -75,25 +75,17 @@ export class PlacesComponent implements OnInit {
       );
   }
   ngOnInit() {
-    // this.types = [
-    //   { DataAvaialble: false, Checked: false, Name: 'Cafe', ParameterName: 'cafe' },
-    //   { DataAvaialble: false, Checked: false, Name: 'School', ParameterName: 'school' },
-    //   { DataAvaialble: false, Checked: false, Name: 'Hotel', ParameterName: 'lodging' },
-    //   { DataAvaialble: false, Checked: false, Name: 'Hospital', ParameterName: 'hospital' },
-    //   { DataAvaialble: false, Checked: false, Name: 'Gym', ParameterName: 'gym' },
-    //   { DataAvaialble: false, Checked: false, Name: 'Spa', ParameterName: 'spa' },
-    //   { DataAvaialble: false, Checked: false, Name: 'Restaurant', ParameterName: 'restaurant' },
-
-    // ];
   }
-  // ***************************************************** //
+  // **********************AutoComplete Types functions***********************************//
   add(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
 
     // Add type
     if ((value || '').trim()) {
-      this._selectedTypes.push(value.trim());
+      const typeToPush = this._matchType(value.trim());
+      this._selectedTypes.push(typeToPush);
+      // this._selectedTypes.push(value.trim());
     }
 
     // Reset the input value
@@ -117,7 +109,19 @@ export class PlacesComponent implements OnInit {
     this.typeInput.nativeElement.value = '';
     this.selectedTypeCtrl.setValue(null);
   }
-
+  private _matchType(str) {
+    const re = new RegExp(str.toLowerCase() + '[a-z]*', 'g');
+    let returnValue = '';
+    this.allTypes.forEach((element) => {
+      const checkingStr = element.toLowerCase().match(re);
+      if (checkingStr) {
+        if (checkingStr[0] === element.toLowerCase()) {
+          returnValue = element;
+        }
+      }
+    });
+    return returnValue;
+  }
   private _filterType(value: string): string[] {
     const filterValue = value.toLowerCase();
 
@@ -180,14 +184,6 @@ export class PlacesComponent implements OnInit {
   //     .map(opt => opt.ParameterName);
   // }
 
-  // checkBoxValueChange(type) {
-
-  //   this.types.forEach((element) => {
-  //     if (element.Name === type.Name) {
-  //       element.Checked = (!element.Checked);
-  //     }
-  //   });
-  // }
 
   checkDataAvailability() {
     if (this.isDataAvailable === false) {
@@ -195,21 +191,13 @@ export class PlacesComponent implements OnInit {
     }
   }
 
-  // isValid(formValidity) {
-  //   if (formValidity && this.isValidType) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
-  // get isValidType() {
-  //   let flag = false;
-  //   this.types.forEach((element) => {
-  //     if (element.Checked === true) {
-  //       flag = true;
-  //     }
-  //   });
-  //   return flag;
-  // }
+  isValid(place, radius) {
+    debugger;
+    if (place !== '' && radius !== '' && this._selectedTypes !== []) {
+      return false;
+    }
+    return true;
+  }
   // setDataAvailableTrue(type: string) {
   //   this.types.forEach((opt) => {
   //     if (opt.ParameterName === type) {
@@ -265,10 +253,10 @@ export class PlacesComponent implements OnInit {
     _viewObj.Type = type;
     if (placeObj.photos) {
       photos = placeObj.photos['0'];
-      _viewObj.ImgUrl = 'api/place/photo?maxwidth=' + photos.width;
+      _viewObj.ImgUrl = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=' + photos.width;
       _viewObj.ImgUrl += '&photoreference=' + photos.photo_reference + '&key=' + this.apiKey;
     } else {
-      _viewObj.ImgUrl = 'null';
+      _viewObj.ImgUrl = null;
     }
     _viewObj.DetailUrl = this.placeDetailUrl + placeObj.place_id + '&key=' + this.apiKey;
     return _viewObj;

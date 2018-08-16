@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Place } from './places.model';
+import Jquery from 'jquery';
 
 @Injectable()
 export class PlacesService {
-  url = 'api/place/nearbysearch/';
-  apiKey = 'AIzaSyCTY07DLNb078JDTetb41jgDnLZxOQtbgg';
+  url = 'http://localhost/PlaceWebApi/api/';
+
   constructor(private http: HttpClient) { }
 
   doQuery(coOrdinates, radius, placeType) {
-    let queryString = 'json?location=' + coOrdinates.Latititude + ',' + coOrdinates.Longititude;
-    queryString += '&radius=' + radius + '&type=' + placeType + '&key=';
+    let queryString = 'Place/?latitude=' + coOrdinates.Latititude + '&longitude=' + coOrdinates.Longititude;
+    queryString += '&radius=' + radius + '&type=' + placeType;
     queryString = queryString.toLowerCase();
 
-    return this.http.get(this.url + queryString + this.apiKey);
-
+    return this.http.get(this.url + queryString);
   }
-  getDetails(url) {
-    return this.http.get(url);
+  getDetails(requString) {
+    return this.http.get(this.url + 'Details/?reference=' + requString);
   }
 }
