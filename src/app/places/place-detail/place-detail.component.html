@@ -6,10 +6,12 @@
     <div class="row ">
       <div class="col-md-8 text-left">
         <span style="font-size:22pt">{{viewData.Name}}</span>
+
         <div class="">
           <span style="font-size: 18pt;color:ash;  text-align: left;">{{viewData.Type[0]}}</span>
         </div>
       </div>
+
       <div class="col-md-4 text-right">
         <div class="stars-label">
           <span style="font-size:22pt">
@@ -18,10 +20,13 @@
           <br>
           <rating [(ngModel)]="viewData.Rating" [readonly]="true"></rating>
         </div>
+
+    
       </div>
     </div>
   </div>
   <mat-dialog-content>
+
 
     <div class="row">
       <div class="col-md-6 pt-3 pl-5" *ngIf="viewData.Address">
