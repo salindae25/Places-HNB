@@ -18,16 +18,37 @@
   background-color: #f39c12;
   color: #1a268a !important;
 }
-input.mat-input-element{
-    padding: 5px;
 
+input.mat-input-element {
+  padding: 5px;
 }
 
-.mat-select-value{
-     padding: 5px;
-
+.mat-select-value {
+  padding: 5px;
 }
+
 ::ng-deep .mat-dialog-container {
-padding:0px !important;
-overflow: hidden !important ;
+
+  padding: 0px !important;
 }
+
+::ng-deep.star-icon {
+  font-size: 18pt !important;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+::ng-deep.mat-form-field-infix {
+  padding: 0 !important;
+}
+.mat-chip-input{
+  margin: 0px !important;
+}
+
+input[type=text]
+{
+ margin: 0px !important;
+}
+

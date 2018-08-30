@@ -1,72 +1,91 @@
 <div *ngIf="viewData">
   <div class="modal-band">
+    <div class="row">
+      <span class="text-right"><mat-icon>close</mat-icon> </span>
+    </div>
     <div class="row ">
-      <div class="col-md-6 text-left">
-        <h3>{{viewData.Name}}</h3>
+      <div class="col-md-8 text-left">
+        <span style="font-size:22pt">{{viewData.Name}}</span>
+
         <div class="">
           <span style="font-size: 18pt;color:ash;  text-align: left;">{{viewData.Type[0]}}</span>
         </div>
       </div>
-      <div class="col-md-6 text-right">
-        <span class="stars-label">
-          <h3>
+
+      <div class="col-md-4 text-right">
+        <div class="stars-label">
+          <span style="font-size:22pt">
             {{viewData.Rating}}
-          </h3>
+          </span>
+          <br>
           <rating [(ngModel)]="viewData.Rating" [readonly]="true"></rating>
-        </span>
+        </div>
+
+    
       </div>
     </div>
   </div>
   <mat-dialog-content>
-    <div class="flex-container">
-      <span *ngIf="viewData.Address">
-        <mat-icon class="blue-text">place
+
+
+    <div class="row">
+      <div class="col-md-6 pt-3 pl-5" *ngIf="viewData.Address">
+
+        <mat-icon class="blue-text" style="font-size: 20px;">place
         </mat-icon>
-        {{viewData.Address}}
-      </span>
-      <span>
-        <mat-icon class="blue-text">work
+        <span> {{viewData.Address}}
+        </span>
+      </div>
+      <div class="col-md-6  pt-3">
+
+        <mat-icon class="blue-text" style="font-size: 20px;">work
         </mat-icon>
-        Open Now: {{viewData.openNow?'Yes':'No'}}
-      </span>
+        <span> Open Now: {{viewData.openNow?'Yes':'No'}}
+        </span>
+      </div>
     </div>
-    <div class="flex-container">
-      <span *ngIf="viewData.TelephoneNo">
-        <mat-icon class="blue-text">phone
+    <div class="row">
+      <div class="col-md-6  pl-5" *ngIf="viewData.TelephoneNo">
+
+        <mat-icon class="blue-text" style="font-size: 20px;">phone
         </mat-icon>
-        {{viewData.TelephoneNo}}
-      </span>
-      <span *ngIf="viewData.WebSite">
-        <mat-icon class="blue-text">language
+        <span> {{viewData.TelephoneNo}}
+        </span>
+      </div>
+
+      <div class="col-md-6" *ngIf="viewData.WebSite">
+        <mat-icon class="blue-text" style="font-size: 20px;">language
         </mat-icon>
-        <a style="text-decoration: none;" [href]="viewData.WebSite">{{viewData.WebSite? 'Related Website':null}}</a>
-      </span>
+        <span>
+          <a style="text-decoration: none;" [href]="viewData.WebSite">{{viewData.WebSite? 'Website':null}}</a>
+        </span>
+      </div>
+
     </div>
+
     <div *ngIf="viewData.WorkingHours" style="margin-left: 25px">
       <mat-expansion-panel>
-        <mat-expansion-panel-header class="flex-container">
+        <mat-expansion-panel-header>
           <table class="table">
             <tr>
               <th>
                 <mat-icon class="blue-text">access_time
                 </mat-icon> Working Hours </th>
-              <th>:{{viewData.WorkingHours|todayTimePeriod|timePeriod}}</th>
+                <th></th>
             </tr>
-
           </table>
         </mat-expansion-panel-header>
+        
         <div *ngFor="let hours of viewData.WorkingHours" class="flex-container">
 
           <span>{{hours|day}}</span>
           <span>:{{hours|timePeriod}}</span>
           <hr>
         </div>
+
       </mat-expansion-panel>
     </div>
+    
   </mat-dialog-content>
 
 </div>
-<style>
-
-
-</style>
