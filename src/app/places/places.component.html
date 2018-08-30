@@ -2,7 +2,6 @@
   <div class="search-field">
     <div class="container shadow-sm p-3 mb-5 bg-white rounded">
       <form #placeForm="ngForm" (ngSubmit)="onSubmit(selectedPlace.value,selectedRadius.value)">
-
         <div class="row">
           <div class="col-md-4">
             <mat-form-field class="example-full-width">
@@ -45,71 +44,78 @@
         <div class="row">
           <div class="col-md-12 text-right">
             <button class="btn waves-effect waves-light" type="submit" [disabled]="isValid(selectedPlace.value,selectedRadius.value)"
-              name="action">Submit
-              <i class="material-icons right">send</i>
+              name="action">Search
+              <i class="material-icons right">search</i>
             </button>
           </div>
-
         </div>
-
-
-
       </form>
     </div>
   </div>
   <div class="container">
     <div class="row" *ngIf="isDataAvailable">
       <div class="col-md-12 right-align">
-        <a class="btn-floating btn-large waves-effect waves-light red" [href]="sanitize(down)" [download]="downloadableFileName">
-          <i class="material-icons">file_download</i>
+<a class="btn-floating btn-large waves-effect waves-light red" matTooltip="Download all the results" 
+  (click)="dowloadExcel('all')">
+          <i class=" material-icons ">file_download</i>
         </a>
       </div>
     </div>
-    <div class="row" *ngIf="isDataAvailable">
-
-      <div class="col-md-3 " *ngFor="let data of viewData">
-        <div class="card hoverable" style="min-height: 500px;">
-          <div class="card-image">
-            <app-image [url]="data.ImgUrl" [type]="data.Type"></app-image>
-          </div>
-          <div class="text-center">
-            <span class="card-title truncate mt-3">{{data.Name}}</span>
-          </div>
-          <hr>
-          <div class="row" style="min-height:170px">
-            <div class="col-md-12 center-align">
-
-              <span style="font-size: 22pt">
-
-                {{data.Rating}}
-              </span>
-              <br>
-              <rating [(ngModel)]="data.Rating"></rating>
+    <mat-accordion *ngIf="isDataAvailable ">
+      <mat-expansion-panel *ngFor="let catagory of _selectedTypes ">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{catagory}}
+          </mat-panel-title>
+        <mat-panel-description>
+<div style="margin-left: 83%;">
+<a class="btn-floating btn-small waves-effect waves-light red" matTooltip="Download {{catagory}} results"  (click)="dowloadExcel(catagory)">
+    <i class=" material-icons ">file_download</i>
+  </a>
+</div>
+        </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="row ">
+          <div class="col-md-3 " *ngFor="let data of viewData|catagoryFilter:catagory ">
+            <div class="card hoverable " style="min-height: 500px; ">
+              <div class="card-image ">
+                <!-- <app-image [url]="data.ImgUrl " [type]="data.Type "></app-image> -->
+              </div>
+              <div class="text-center ">
+                <span class="card-title truncate mt-3 ">{{data.Name}}</span>
+              </div>
+              <hr>
+              <div class="row " style="min-height:170px ">
+                <div class="col-md-12 center-align ">
+                  <span style="font-size: 22pt ">
+                    {{data.Rating}}
+                  </span>
+                  <br>
+                  <rating [(ngModel)]="data.Rating "></rating>
+                </div>
+                <div class="col-md-12 text-center ">
+                  {{data.Address}}
+                </div>
+                <div class="col-md-12 text-center ">
+                  <span class="badge badge-secondary " style="color: white;float:none !important; ">
+                    {{data.Type}}
+                  </span>
+                </div>
+              </div>
+              <div class="card-action text-center ">
+                <button class="btn waves-effect waves-light " (click)="openDialog(data.DetailUrl) ">Get Detail</button>
+              </div>
             </div>
-            <div class="col-md-12 text-center">
 
-
-              {{data.Address}}
-
-            </div>
-            <div class="col-md-12 text-center">
-              <span class="badge badge-secondary" style="color: white;float:none !important;">
-                {{data.Type}}
-              </span>
-            </div>
-          </div>
-          <div class="card-action text-center">
-            <button class="btn waves-effect waves-light" (click)="openDialog(data.DetailUrl)">Get Detail</button>
           </div>
         </div>
-
-      </div>
-    </div>
-    <div class="row" *ngIf="dataLoadingFlag">
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div class="row " *ngIf="dataLoadingFlag ">
       Loading ..
     </div>
-    <div class="row" *ngIf="noDataFlag">
-      <div *ngIf="!isDataAvailable">
+    <div class="row " *ngIf="noDataFlag ">
+      <div *ngIf="!isDataAvailable ">
         Sorry No Places Available....
       </div>
     </div>

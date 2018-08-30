@@ -18,7 +18,7 @@ import { PlaceDetailComponent } from './place-detail/place-detail.component';
 export class PlacesComponent implements OnInit {
   queryData: any;
   down: any;
-  apiKey = 'AIzaSyCTY07DLNb078JDTetb41jgDnLZxOQtbgg';
+  apiKey = '';
   viewData: Array<ViewPlace> = [];
   placeDetailUrl = 'api/place/details/json?placeid=';
   downloadableFileName: string;
@@ -73,6 +73,10 @@ export class PlacesComponent implements OnInit {
         startWith<string>(''),
         map((type) => type ? this._filterType(type) : this.allTypes.slice())
       );
+      if(localStorage.getItem('apiKey'))
+      {
+        this.apiKey=localStorage.getItem('apiKey');
+      }
   }
   ngOnInit() {
   }
@@ -170,20 +174,7 @@ export class PlacesComponent implements OnInit {
 
     return this.places.filter(option => option.Name.toLowerCase().indexOf(filterValue) === 0);
   }
-  // setDataFlag() {
-  //   this.types.filter((opt) => {
-  //     if (opt.DataAvaialble) {
-  //       this.dataAvailableFlag = true;
-  //     }
-  //   });
-  // }
-
-  // get selectedTypes() {
-  //   return this.types
-  //     .filter(opt => opt.Checked)
-  //     .map(opt => opt.ParameterName);
-  // }
-
+  
 
   checkDataAvailability() {
     if (this.isDataAvailable === false) {
@@ -192,19 +183,12 @@ export class PlacesComponent implements OnInit {
   }
 
   isValid(place, radius) {
-    debugger;
-    if (place !== '' && radius !== '' && this._selectedTypes !== []) {
+    if (place !== '' && radius !== '' && this._selectedTypes.length !== 0) {
       return false;
     }
     return true;
   }
-  // setDataAvailableTrue(type: string) {
-  //   this.types.forEach((opt) => {
-  //     if (opt.ParameterName === type) {
-  //       opt.DataAvaialble = true;
-  //     }
-  //   });
-  // }
+
 
   processData(data: any, type: string) {
 
@@ -224,6 +208,8 @@ export class PlacesComponent implements OnInit {
       // this.setDataFlag();
       this.dataLoadingFlag = false;
       this.createDataURlToDownload();
+      let temp = JSON.parse(JSON.stringify(this.viewData));
+      this.viewData =temp;
       this.cdrf.detectChanges();
 
     }
@@ -263,7 +249,6 @@ export class PlacesComponent implements OnInit {
   }
 
   doQueryBasedOnType(place: Place, radius: number, type: string) {
-    // debugger;
     let _queryData = null;
     const localKey = place.Name + '_' + radius + '_' + type;
     if (localStorage.getItem(localKey)) {
@@ -371,6 +356,33 @@ export class PlacesComponent implements OnInit {
         return st;
       }, str);
     }
+  }
+  dowloadExcel(key:string) {
+    var dataSheets = [];
+    var sheetHeaders = [];
+    var fileName='Place';
+    if(key.toLowerCase()==='all'){    
+      this._selectedTypes.forEach((element) => {
+        if (element) {
+          var op = { sheeitd: element.toLowerCase(), header: false };
+          var ds = this.viewData.filter((ele) => {
+            return ele.Type == element.toLowerCase();
+          });
+          dataSheets.push(ds);
+          sheetHeaders.push(op);
+        }
+      });
+    }else{
+      var op = { sheeitd: key, header: false };
+      sheetHeaders.push();
+      var ds = this.viewData.filter((ele) => {
+        return ele.Type == key.toLowerCase();
+      });
+      dataSheets.push(ds);
+    }
+    fileName += '_' + key;
+    //  const opts = [{ sheeitd: "Sheet 1", header: true }, { sheeitd: "Sheet 2", header: true }];
+    alasql("SELECT INTO XLSX (?,?) FROM ?", [fileName,sheetHeaders, dataSheets]);
   }
 }
 
