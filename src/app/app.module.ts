@@ -10,7 +10,7 @@ import {
         MatDialogModule,
         MatGridListModule, MatChipsModule, MatTooltipModule
 } from '@angular/material';
-
+import * as alasql from "alasql";
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
