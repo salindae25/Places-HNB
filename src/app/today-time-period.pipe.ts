@@ -15,7 +15,6 @@ export class TodayTimePeriodPipe implements PipeTransform {
     { Name: 'Sunday', day: 7 },
   ];
   transform(value: any): any {
-    debugger;
     const patt = /[a-zA-Z]{4,10}/;
     let returnValue = '';
     const date = new Date();

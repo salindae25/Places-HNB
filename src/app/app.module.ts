@@ -8,8 +8,9 @@ import {
         MatInputModule,
         MatSelectModule,
         MatDialogModule,
-        MatGridListModule, MatChipsModule
+        MatGridListModule, MatChipsModule, MatTooltipModule
 } from '@angular/material';
+
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -27,6 +28,7 @@ import { DayPipe } from './day.pipe';
 import { TimePeriodPipe } from './time-period.pipe';
 import { TodayTimePeriodPipe } from './today-time-period.pipe';
 import { FrontPageComponent } from './front-page/front-page.component';
+import {  CatagoryFilterPipe } from './catagory-fiter.pipe';
 
 
 @NgModule({
@@ -39,7 +41,8 @@ import { FrontPageComponent } from './front-page/front-page.component';
     DayPipe,
     TimePeriodPipe,
     TodayTimePeriodPipe,
-    FrontPageComponent
+    FrontPageComponent,
+    CatagoryFilterPipe
   ],
   imports: [
     BrowserModule,
@@ -51,7 +54,7 @@ import { FrontPageComponent } from './front-page/front-page.component';
     MatAutocompleteModule,
     BrowserAnimationsModule,
     MatInputModule,
-    MatSelectModule, MatDialogModule, MatExpansionModule, MatIconModule, MatGridListModule, MatChipsModule,
+    MatSelectModule, MatDialogModule, MatExpansionModule, MatIconModule, MatGridListModule, MatChipsModule, MatTooltipModule
   ],
   providers: [
     PlacesService,

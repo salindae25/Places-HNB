@@ -18,12 +18,12 @@ import { PlaceDetailComponent } from './place-detail/place-detail.component';
 export class PlacesComponent implements OnInit {
   queryData: any;
   down: any;
-  apiKey = 'AIzaSyCTY07DLNb078JDTetb41jgDnLZxOQtbgg';
+  apiKey = '';
   viewData: Array<ViewPlace> = [];
   placeDetailUrl = 'api/place/details/json?placeid=';
   downloadableFileName: string;
   selectedPlaceCntrl: FormControl = new FormControl();
-  // *********************************************************//
+  // **********************AutoComplete Types variables***********************************//
   visible = true;
   selectable = true;
   removable = true;
@@ -37,7 +37,7 @@ export class PlacesComponent implements OnInit {
   types: Place[] = [];
 
   @ViewChild('typeInput') typeInput: ElementRef;
-  // ********************************************************//
+  // **********************************************************************************//
   places: Place[] = [
     { Name: 'Head Office', Latititude: 6.921098, Longititude: 79.862532 },
     { Name: 'Negombo', Latititude: 7.208752, Longititude: 79.839170 },
@@ -61,7 +61,7 @@ export class PlacesComponent implements OnInit {
     private sanitizer: DomSanitizer,
     public dialog: MatDialog) {
 
-    debugger;
+
     this.locationsOptions = this.selectedPlaceCntrl.valueChanges
       .pipe(
         startWith<string>(''),
@@ -73,27 +73,23 @@ export class PlacesComponent implements OnInit {
         startWith<string>(''),
         map((type) => type ? this._filterType(type) : this.allTypes.slice())
       );
+      if(localStorage.getItem('apiKey'))
+      {
+        this.apiKey=localStorage.getItem('apiKey');
+      }
   }
   ngOnInit() {
-    // this.types = [
-    //   { DataAvaialble: false, Checked: false, Name: 'Cafe', ParameterName: 'cafe' },
-    //   { DataAvaialble: false, Checked: false, Name: 'School', ParameterName: 'school' },
-    //   { DataAvaialble: false, Checked: false, Name: 'Hotel', ParameterName: 'lodging' },
-    //   { DataAvaialble: false, Checked: false, Name: 'Hospital', ParameterName: 'hospital' },
-    //   { DataAvaialble: false, Checked: false, Name: 'Gym', ParameterName: 'gym' },
-    //   { DataAvaialble: false, Checked: false, Name: 'Spa', ParameterName: 'spa' },
-    //   { DataAvaialble: false, Checked: false, Name: 'Restaurant', ParameterName: 'restaurant' },
-
-    // ];
   }
-  // ***************************************************** //
+  // **********************AutoComplete Types functions***********************************//
   add(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
 
     // Add type
     if ((value || '').trim()) {
-      this._selectedTypes.push(value.trim());
+      const typeToPush = this._matchType(value.trim());
+      this._selectedTypes.push(typeToPush);
+      // this._selectedTypes.push(value.trim());
     }
 
     // Reset the input value
@@ -117,7 +113,19 @@ export class PlacesComponent implements OnInit {
     this.typeInput.nativeElement.value = '';
     this.selectedTypeCtrl.setValue(null);
   }
-
+  private _matchType(str) {
+    const re = new RegExp(str.toLowerCase() + '[a-z]*', 'g');
+    let returnValue = '';
+    this.allTypes.forEach((element) => {
+      const checkingStr = element.toLowerCase().match(re);
+      if (checkingStr) {
+        if (checkingStr[0] === element.toLowerCase()) {
+          returnValue = element;
+        }
+      }
+    });
+    return returnValue;
+  }
   private _filterType(value: string): string[] {
     const filterValue = value.toLowerCase();
 
@@ -166,28 +174,7 @@ export class PlacesComponent implements OnInit {
 
     return this.places.filter(option => option.Name.toLowerCase().indexOf(filterValue) === 0);
   }
-  // setDataFlag() {
-  //   this.types.filter((opt) => {
-  //     if (opt.DataAvaialble) {
-  //       this.dataAvailableFlag = true;
-  //     }
-  //   });
-  // }
-
-  // get selectedTypes() {
-  //   return this.types
-  //     .filter(opt => opt.Checked)
-  //     .map(opt => opt.ParameterName);
-  // }
-
-  // checkBoxValueChange(type) {
-
-  //   this.types.forEach((element) => {
-  //     if (element.Name === type.Name) {
-  //       element.Checked = (!element.Checked);
-  //     }
-  //   });
-  // }
+  
 
   checkDataAvailability() {
     if (this.isDataAvailable === false) {
@@ -195,28 +182,13 @@ export class PlacesComponent implements OnInit {
     }
   }
 
-  // isValid(formValidity) {
-  //   if (formValidity && this.isValidType) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
-  // get isValidType() {
-  //   let flag = false;
-  //   this.types.forEach((element) => {
-  //     if (element.Checked === true) {
-  //       flag = true;
-  //     }
-  //   });
-  //   return flag;
-  // }
-  // setDataAvailableTrue(type: string) {
-  //   this.types.forEach((opt) => {
-  //     if (opt.ParameterName === type) {
-  //       opt.DataAvaialble = true;
-  //     }
-  //   });
-  // }
+  isValid(place, radius) {
+    if (place !== '' && radius !== '' && this._selectedTypes.length !== 0) {
+      return false;
+    }
+    return true;
+  }
+
 
   processData(data: any, type: string) {
 
@@ -236,6 +208,8 @@ export class PlacesComponent implements OnInit {
       // this.setDataFlag();
       this.dataLoadingFlag = false;
       this.createDataURlToDownload();
+      let temp = JSON.parse(JSON.stringify(this.viewData));
+      this.viewData =temp;
       this.cdrf.detectChanges();
 
     }
@@ -265,17 +239,16 @@ export class PlacesComponent implements OnInit {
     _viewObj.Type = type;
     if (placeObj.photos) {
       photos = placeObj.photos['0'];
-      _viewObj.ImgUrl = 'api/place/photo?maxwidth=' + photos.width;
+      _viewObj.ImgUrl = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=' + photos.width;
       _viewObj.ImgUrl += '&photoreference=' + photos.photo_reference + '&key=' + this.apiKey;
     } else {
-      _viewObj.ImgUrl = 'null';
+      _viewObj.ImgUrl = null;
     }
     _viewObj.DetailUrl = this.placeDetailUrl + placeObj.place_id + '&key=' + this.apiKey;
     return _viewObj;
   }
 
   doQueryBasedOnType(place: Place, radius: number, type: string) {
-    // debugger;
     let _queryData = null;
     const localKey = place.Name + '_' + radius + '_' + type;
     if (localStorage.getItem(localKey)) {
@@ -383,6 +356,33 @@ export class PlacesComponent implements OnInit {
         return st;
       }, str);
     }
+  }
+  dowloadExcel(key:string) {
+    var dataSheets = [];
+    var sheetHeaders = [];
+    var fileName='Place';
+    if(key.toLowerCase()==='all'){    
+      this._selectedTypes.forEach((element) => {
+        if (element) {
+          var op = { sheeitd: element.toLowerCase(), header: false };
+          var ds = this.viewData.filter((ele) => {
+            return ele.Type == element.toLowerCase();
+          });
+          dataSheets.push(ds);
+          sheetHeaders.push(op);
+        }
+      });
+    }else{
+      var op = { sheeitd: key, header: false };
+      sheetHeaders.push();
+      var ds = this.viewData.filter((ele) => {
+        return ele.Type == key.toLowerCase();
+      });
+      dataSheets.push(ds);
+    }
+    fileName += '_' + key;
+    //  const opts = [{ sheeitd: "Sheet 1", header: true }, { sheeitd: "Sheet 2", header: true }];
+    alasql("SELECT INTO XLSX (?,?) FROM ?", [fileName,sheetHeaders, dataSheets]);
   }
 }
 
