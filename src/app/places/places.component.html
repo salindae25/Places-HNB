@@ -113,7 +113,7 @@
           <div class="col-md-3 " *ngFor="let data of viewData|catagoryFilter:catagory ">
             <div class="card hoverable " style="min-height: 500px; ">
               <div class="card-image ">
-                <!-- <app-image [url]="data.ImgUrl " [type]="data.Type "></app-image> -->
+                <app-image [url]="data.ImgUrl " [type]="data.Type "></app-image>
               </div>
               <div class="text-center ">
                 <span class="card-title truncate mt-3 ">{{data.Name}}</span>
