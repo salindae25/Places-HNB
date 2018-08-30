@@ -1,5 +1,6 @@
 <div>
   <div class="search-field">
+
     <div class="container shadow-sm p-3 mb-5 bg-white rounded">
       <form #placeForm="ngForm" (ngSubmit)="onSubmit(selectedPlace.value,selectedRadius.value)">
         <div class="row">
@@ -10,10 +11,12 @@
                 required>
               <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
                 <mat-option *ngFor="let place of locationsOptions |async" [value]="place.Name">
+
                   {{place.Name}}
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
+
           </div>
           <div class="col-md-4">
             <mat-form-field class="example-full-width">
@@ -47,14 +50,45 @@
               name="action">Search
               <i class="material-icons right">search</i>
             </button>
+
           </div>
-        </div>
-      </form>
+          <div class="col s3">
+            <mat-form-field>
+              <label class="label-field">Radius (in Km)</label>
+              <mat-select #selectedRadius required style="padding: 5px;">
+                <mat-option *ngFor="let rad of radius" [value]="rad.InMeters">
+                  {{rad.InKiloMeters}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col s4">
+            <label class="label-field">Type</label>
+            <p>
+              <span class="col" *ngFor="let type of types">
+                <label>
+                  <input class="browser-default" type="checkbox" (click)="checkBoxValueChange(type)" [value]="type.ParameterName" name="optionType"
+                    [checked]="type.Checked" />
+                  <span class="label-field">{{type.Name}}</span>
+                </label>
+              </span>
+            </p>
+          </div>
+          <div class="container">
+            <div class="input-field col s12 right-align rigth-margin">
+              <button class="btn waves-effect waves-light" [disabled]="!isValid(placeForm.valid)" type="submit" name="action">Submit
+                <i class="material-icons right">send</i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
   <div class="container">
     <div class="row" *ngIf="isDataAvailable">
       <div class="col-md-12 right-align">
+
 <a class="btn-floating btn-large waves-effect waves-light red" matTooltip="Download all the results" 
   (click)="dowloadExcel('all')">
           <i class=" material-icons ">file_download</i>
@@ -107,11 +141,17 @@
               </div>
             </div>
 
+
+          </div>
+          <div class="card-action text-right">
+            <button class="btn waves-effect waves-light" (click)="openDialog(data.DetailUrl)">Get Detail</button>
           </div>
         </div>
+
       </mat-expansion-panel>
     </mat-accordion>
     <div class="row " *ngIf="dataLoadingFlag ">
+
       Loading ..
     </div>
     <div class="row " *ngIf="noDataFlag ">

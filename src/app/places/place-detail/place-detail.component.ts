@@ -16,8 +16,10 @@ export interface DataSent {
 })
 export class PlaceDetailComponent {
   errorFlag = false;
+
   viewData: DialogData;
   apiKey = 'AIzaSyCTY07DLNb078JDTetb41jgDnLZxOQtbgg';
+
   constructor(
     private placesService: PlacesService,
     public dialogRef: MatDialogRef<PlaceDetailComponent>,

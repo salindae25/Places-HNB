@@ -138,7 +138,7 @@ export class PlacesComponent implements OnInit {
     dialogConfig.autoFocus = true;
     const dialogRef = this.dialog.open(PlaceDetailComponent, {
       height: 'auto',
-      width: '650px',
+      width: '800px',
       panelClass: 'detail-modal',
       data: { url: url }
     });
@@ -239,8 +239,10 @@ export class PlacesComponent implements OnInit {
     _viewObj.Type = type;
     if (placeObj.photos) {
       photos = placeObj.photos['0'];
+
       _viewObj.ImgUrl = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=' + photos.width;
       _viewObj.ImgUrl += '&photoreference=' + photos.photo_reference + '&key=' + this.apiKey;
+
     } else {
       _viewObj.ImgUrl = null;
     }
