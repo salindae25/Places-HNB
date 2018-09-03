@@ -73,10 +73,9 @@ export class PlacesComponent implements OnInit {
         startWith<string>(''),
         map((type) => type ? this._filterType(type) : this.allTypes.slice())
       );
-      if(localStorage.getItem('apiKey'))
-      {
-        this.apiKey=localStorage.getItem('apiKey');
-      }
+    if (localStorage.getItem('apiKey')) {
+      this.apiKey = localStorage.getItem('apiKey');
+    }
   }
   ngOnInit() {
   }
@@ -86,9 +85,12 @@ export class PlacesComponent implements OnInit {
     const value = event.value;
 
     // Add type
-    if ((value || '').trim()) {
+    if ((value ).trim()) {
+
       const typeToPush = this._matchType(value.trim());
-      this._selectedTypes.push(typeToPush);
+      if (this._checkForDuplicateTypes(typeToPush)){
+        this._selectedTypes.push(typeToPush);
+      }
       // this._selectedTypes.push(value.trim());
     }
 
@@ -99,7 +101,9 @@ export class PlacesComponent implements OnInit {
 
     this.selectedTypeCtrl.setValue(null);
   }
-
+  _checkForDuplicateTypes(str) {
+    return this._selectedTypes.indexOf(str) ===-1 ? true : false;
+  }
   remove(type: string): void {
     const index = this._selectedTypes.indexOf(type);
 
@@ -113,9 +117,11 @@ export class PlacesComponent implements OnInit {
     this.typeInput.nativeElement.value = '';
     this.selectedTypeCtrl.setValue(null);
   }
+
   private _matchType(str) {
     const re = new RegExp(str.toLowerCase() + '[a-z]*', 'g');
     let returnValue = '';
+    debugger
     this.allTypes.forEach((element) => {
       const checkingStr = element.toLowerCase().match(re);
       if (checkingStr) {
@@ -174,7 +180,7 @@ export class PlacesComponent implements OnInit {
 
     return this.places.filter(option => option.Name.toLowerCase().indexOf(filterValue) === 0);
   }
-  
+
 
   checkDataAvailability() {
     if (this.isDataAvailable === false) {
@@ -209,7 +215,7 @@ export class PlacesComponent implements OnInit {
       this.dataLoadingFlag = false;
       this.createDataURlToDownload();
       let temp = JSON.parse(JSON.stringify(this.viewData));
-      this.viewData =temp;
+      this.viewData = temp;
       this.cdrf.detectChanges();
 
     }
@@ -359,11 +365,11 @@ export class PlacesComponent implements OnInit {
       }, str);
     }
   }
-  dowloadExcel(key:string) {
+  dowloadExcel(key: string) {
     var dataSheets = [];
     var sheetHeaders = [];
-    var fileName='Place';
-    if(key.toLowerCase()==='all'){    
+    var fileName = 'Place';
+    if (key.toLowerCase() === 'all') {
       this._selectedTypes.forEach((element) => {
         if (element) {
           var op = { sheeitd: element.toLowerCase(), header: false };
@@ -374,7 +380,7 @@ export class PlacesComponent implements OnInit {
           sheetHeaders.push(op);
         }
       });
-    }else{
+    } else {
       var op = { sheeitd: key, header: false };
       sheetHeaders.push();
       var ds = this.viewData.filter((ele) => {
@@ -384,7 +390,7 @@ export class PlacesComponent implements OnInit {
     }
     fileName += '_' + key;
     //  const opts = [{ sheeitd: "Sheet 1", header: true }, { sheeitd: "Sheet 2", header: true }];
-    alasql("SELECT INTO XLSX (?,?) FROM ?", [fileName,sheetHeaders, dataSheets]);
+    alasql("SELECT INTO XLSX (?,?) FROM ?", [fileName, sheetHeaders, dataSheets]);
   }
 }
 

@@ -1,0 +1,30 @@
+<div class="container">
+  <table *ngIf="islogDataAvailable" >
+    <tr>
+      <th>Activity Id</th>
+      <th>Name</th>
+      <th>UserName</th>
+      <th>Location</th>
+      <th>Radius</th>
+      <th>Types</th>
+    </tr>
+<tr>
+  <th><input class="browser-default" (blur)="filter()" type="text"  [(ngModel)]="model.id"></th>
+<th><input class="browser-default" type="text" [(ngModel)]="model.Name"></th>
+<th><input class="browser-default" type="text" [(ngModel)]="model.UserName"></th>
+<th><input class="browser-default" type="text" [(ngModel)]="model.Location"></th>
+<th><input class="browser-default" type="text" [(ngModel)]="model.Radius"></th>
+<th><input class="browser-default" type="text" [(ngModel)]="model.Types"></th>
+</tr>
+<tr *ngFor="let log of logCollection|filterUser:model.id" >
+  <td>{{log.id}}</td>
+  <td>{{log.name}}</td>
+  <td>{{log.userName}}</td>
+  <td>{{log.location}}</td>
+  <td>{{log.radius}}</td>
+<td>
+<ng-container *ngFor="let item of log.types"><span class="badge badge-secondary " style="color:white;">{{item}}</span> </ng-container>
+</td>
+</tr>
+  </table>
+</div>

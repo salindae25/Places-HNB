@@ -29,6 +29,12 @@ import { TimePeriodPipe } from './time-period.pipe';
 import { TodayTimePeriodPipe } from './today-time-period.pipe';
 import { FrontPageComponent } from './front-page/front-page.component';
 import {  CatagoryFilterPipe } from './catagory-fiter.pipe';
+import { PlaceAuthGuard } from './place-auth.guard';
+import { AppService } from './app.service';
+import { ActivityLogComponent } from './activity-log/activity-log.component';
+import { ActivityAuthGuard } from './activity-auth.guard';
+import { FilterUserPipe } from './activity-log/filter-user.pipe';
+import { ActivityService } from './activity-log/activity.service';
 
 
 @NgModule({
@@ -42,7 +48,9 @@ import {  CatagoryFilterPipe } from './catagory-fiter.pipe';
     TimePeriodPipe,
     TodayTimePeriodPipe,
     FrontPageComponent,
-    CatagoryFilterPipe
+    CatagoryFilterPipe,
+    ActivityLogComponent,
+    FilterUserPipe
   ],
   imports: [
     BrowserModule,
@@ -59,6 +67,10 @@ import {  CatagoryFilterPipe } from './catagory-fiter.pipe';
   providers: [
     PlacesService,
     ImageService,
+    AppService,
+    ActivityAuthGuard,
+    ActivityService,
+    PlaceAuthGuard,
   ],
   bootstrap: [AppComponent],
   entryComponents: [PlaceDetailComponent]
